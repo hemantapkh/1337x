@@ -13,11 +13,10 @@ def torrentParser(response):
     pageCount = soup.find('li', {'class': 'last'})
     pageCount = pageCount.findAll('a')[0]['href'].split('/')[-2] if pageCount else 1
 
-    results = {'items': [], 'pageCount': pageCount}
+    results = {'items': [], 'itemCount': len(torrentList), 'pageCount': pageCount}
 
     if torrentList:
         for count,torrent in enumerate(torrentList):
-            print(count)
             name = torrent.getText().strip()
             torrentId = torrent['href'].split('/')[2]
             link = 'https://www.1337xx.to'+ torrent['href']
