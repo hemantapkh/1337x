@@ -14,6 +14,7 @@ class py1337x():
     
     #: Searching torrents
     def search(self, query, page=1, category=None, sortBy=None, order='desc'):
+        query = '+'.join(query.split())
         category = category.upper() if category and category.lower() in ['xxx', 'tv'] else category.capitalize() if category else None
         url = f"{self.baseUrl}/{'sort-' if sortBy else ''}{'category-' if category else ''}search/{query}/{category+'/' if category else ''}{sortBy.lower()+'/' if sortBy else ''}{order.lower()+'/' if sortBy else ''}{page}/"
 
