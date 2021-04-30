@@ -4,11 +4,11 @@ def torrentParser(response):
     soup = BeautifulSoup(response.content, 'html.parser')
 
     torrentList = soup.select('a[href*="/torrent/"]')
-    seedersList = soup.find_all('td', {'class': 'coll-2 seeds'})
-    leechersList = soup.find_all('td', {'class': 'coll-3 leeches'})
-    sizeList = soup.find_all('td', {'class': ['coll-4 size mob-vip', 'coll-4 size mob-uploader', 'coll-4 size mob-user', 'coll-4 size mob-trial-uploader']})
-    timeList = soup.find_all('td', {'class': 'coll-date'})
-    uploaderList = soup.find_all('td', {'class': ['coll-5 vip', 'coll-5 uploader', 'coll-5 user', 'coll-5 trial-uploader']})
+    seedersList = soup.select('td.coll-2')
+    leechersList = soup.select('td.coll-3')
+    sizeList = soup.select('td.coll-4')
+    timeList = soup.select('td.coll-date')
+    uploaderList = soup.select('td.coll-5')
 
     pageCount = soup.find('li', {'class': 'last'})
     pageCount = pageCount.findAll('a')[0]['href'].split('/')[-2] if pageCount else 1
@@ -17,14 +17,15 @@ def torrentParser(response):
 
     if torrentList:
         for count,torrent in enumerate(torrentList):
+            print(count)
             name = torrent.getText().strip()
             torrentId = torrent['href'].split('/')[2]
             link = 'https://www.1337xx.to'+ torrent['href']
-            seeders = seedersList[count].text
-            leechers = leechersList[count].text
-            size = sizeList[count].text
-            time = timeList[count].text
-            uploader = uploaderList[count].text
+            seeders = seedersList[count].getText()
+            leechers = leechersList[count].getText()
+            size = sizeList[count].getText()
+            time = timeList[count].getText()
+            uploader = uploaderList[count].getText()
             
             results['items'].append({'name': name, 'id': torrentId, 'link': link, 'seeders': seeders, 'leechers': leechers, 'size': size, 'time': time, 'uploader': uploader})
 
