@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 def torrentParser(response):
     soup = BeautifulSoup(response.content, 'html.parser')
 
-    torrentList = soup.find_all('td', {'class': 'coll-1 name'})
+    torrentList = soup.select('a[href*="/torrent/"]')
     seedersList = soup.find_all('td', {'class': 'coll-2 seeds'})
     leechersList = soup.find_all('td', {'class': 'coll-3 leeches'})
     sizeList = soup.find_all('td', {'class': ['coll-4 size mob-vip', 'coll-4 size mob-uploader', 'coll-4 size mob-user', 'coll-4 size mob-trial-uploader']})
@@ -17,18 +17,21 @@ def torrentParser(response):
 
     if torrentList:
         for count,torrent in enumerate(torrentList):
+            name = torrent.getText().strip()
+            torrentId = torrent['href'].split('/')[2]
+            link = 'https://www.1337xx.to'+ torrent['href']
             seeders = seedersList[count].text
             leechers = leechersList[count].text
             size = sizeList[count].text
             time = timeList[count].text
             uploader = uploaderList[count].text
             
-            results['items'].append({'name': torrent.text.strip(), 'link': 'https://www.1337xx.to'+torrent.findAll('a')[0]['href'], 'seeders': seeders, 'leechers': leechers, 'size': size, 'time': time, 'uploader': uploader})
+            results['items'].append({'name': name, 'id': torrentId, 'link': link, 'seeders': seeders, 'leechers': leechers, 'size': size, 'time': time, 'uploader': uploader})
 
     return results
 
 def infoParser(response):
-    soup = BeautifulSoup(response.content)
+    soup = BeautifulSoup(response.content, 'html.parser')
 
     name = soup.find('div', {'class': 'box-info-heading clearfix'})
     name = name.text.strip() if name else None
@@ -72,4 +75,4 @@ def infoParser(response):
     else:
         category = species =  language = size = uploader = uploaderLink = downloads = lastChecked = uploadDate = seeders = leechers = None
 
-    return {'name': name, 'shortName': shortName, 'description': description, 'category': category, 'type': species, 'genre': genre, 'language': language, 'size': size, 'image': image, 'uploader': uploader, 'uploaderLink': uploaderLink, 'lastChecked': lastChecked, 'uploadDate': uploadDate, 'seeders': seeders, 'leechers': leechers, 'magnetLink': magnetLink, 'infoHash': infoHash}
+    return {'name': name, 'shortName': shortName, 'description': description, 'category': category, 'type': species, 'genre': genre, 'language': language, 'size': size, 'image': image, 'uploader': uploader, 'uploaderLink': uploaderLink, 'downloads': downloads, 'lastChecked': lastChecked, 'uploadDate': uploadDate, 'seeders': seeders, 'leechers': leechers, 'magnetLink': magnetLink, 'infoHash': infoHash}

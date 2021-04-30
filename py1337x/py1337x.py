@@ -13,44 +13,45 @@ class py1337x():
         }
     
     #: Searching torrents
-    def search(self, query, page=1, catagory=None, sortBy=None, order='desc'):
-        catagory = catagory.upper() if catagory and catagory.lower() in ['xxx', 'tv'] else catagory.capitalize() if catagory else None
-        url = f"{self.baseUrl}/{'sort-' if sortBy else ''}{'category-' if catagory else ''}search/{query}/{catagory+'/' if catagory else ''}{sortBy.lower()+'/' if sortBy else ''}{order.lower()+'/' if sortBy else ''}{page}/"
+    def search(self, query, page=1, category=None, sortBy=None, order='desc'):
+        category = category.upper() if category and category.lower() in ['xxx', 'tv'] else category.capitalize() if category else None
+        url = f"{self.baseUrl}/{'sort-' if sortBy else ''}{'category-' if category else ''}search/{query}/{category+'/' if category else ''}{sortBy.lower()+'/' if sortBy else ''}{order.lower()+'/' if sortBy else ''}{page}/"
 
         response = requests.get(url, headers=self.headers)
         return parser.torrentParser(response)
 
     #: Trending torrents
-    def trending(self, catagory=None, week=False):
-        url = f"{self.baseUrl}/trending{'-week' if week and not catagory else ''}{'/w/'+catagory.lower()+'/' if week and catagory else '/d/'+catagory.lower()+'/' if not week and catagory else ''}"
+    def trending(self, category=None, week=False):
+        url = f"{self.baseUrl}/trending{'-week' if week and not category else ''}{'/w/'+category.lower()+'/' if week and category else '/d/'+category.lower()+'/' if not week and category else ''}"
         
         response = requests.get(url, headers=self.headers)
         return parser.torrentParser(response)
     
     #: Top 100 torrents
-    def top100(self, catagory=None):
-        url = f"{self.baseUrl}/top-100{'-'+catagory.lower() if catagory else ''}"
+    def top(self, category=None):
+        url = f"{self.baseUrl}/top-100{'-'+category.lower() if category else ''}"
         
         response = requests.get(url, headers=self.headers)
         return parser.torrentParser(response)
     
     #: Popular torrents
-    def popular(self, catagory, week=False):
-        url = f"{self.baseUrl}/popular-{catagory.lower()}{'-week' if week else ''}"
+    def popular(self, category, week=False):
+        url = f"{self.baseUrl}/popular-{category.lower()}{'-week' if week else ''}"
 
         response = requests.get(url, headers=self.headers)
         return parser.torrentParser(response)
 
-    #: Browse torrents by catagory type
-    def browse(self, catagory, page=1):
-        catagory = catagory.upper() if catagory.lower() in ['xxx', 'tv'] else catagory.capitalize()
-        url = f'{self.baseUrl}/cat/{catagory}/{page}/'
+    #: Browse torrents by category type
+    def browse(self, category, page=1):
+        category = category.upper() if category.lower() in ['xxx', 'tv'] else category.capitalize()
+        url = f'{self.baseUrl}/cat/{category}/{page}/'
 
         response = requests.get(url, headers=self.headers)
         return parser.torrentParser(response)
 
     #: Info of torrent
-    def info(self, link):
+    def info(self, link, id=False):
+        link = f'{self.baseUrl}/torrent/{link}/h9/'
         response = requests.get(link, headers=self.headers)
 
         return parser.infoParser(response)
