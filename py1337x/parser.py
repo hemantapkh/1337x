@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-def torrentParser(response):
+def torrentParser(response, page=None):
     soup = BeautifulSoup(response.content, 'html.parser')
 
     torrentList = soup.select('a[href*="/torrent/"]')
@@ -10,10 +10,15 @@ def torrentParser(response):
     timeList = soup.select('td.coll-date')
     uploaderList = soup.select('td.coll-5')
 
-    pageCount = soup.find('li', {'class': 'last'})
-    pageCount = pageCount.findAll('a')[0]['href'].split('/')[-2] if pageCount else 1
+    firstPage = soup.find('li', {'class': 'first'})
+    lastPage = soup.find('li', {'class': 'last'})
 
-    results = {'items': [], 'itemCount': len(torrentList), 'pageCount': pageCount}
+    if firstPage and not lastPage:
+        pageCount = page
+    else:
+        pageCount = int(lastPage.findAll('a')[0]['href'].split('/')[-2]) if lastPage else 1
+
+    results = {'items': [], 'currentPage':page or 1, 'itemCount': len(torrentList), 'pageCount': pageCount}
 
     if torrentList:
         for count,torrent in enumerate(torrentList):

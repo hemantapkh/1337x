@@ -19,7 +19,7 @@ class py1337x():
         url = f"{self.baseUrl}/{'sort-' if sortBy else ''}{'category-' if category else ''}search/{query}/{category+'/' if category else ''}{sortBy.lower()+'/' if sortBy else ''}{order.lower()+'/' if sortBy else ''}{page}/"
 
         response = requests.get(url, headers=self.headers)
-        return parser.torrentParser(response)
+        return parser.torrentParser(response, page)
 
     #: Trending torrents
     def trending(self, category=None, week=False):
@@ -48,7 +48,7 @@ class py1337x():
         url = f'{self.baseUrl}/cat/{category}/{page}/'
 
         response = requests.get(url, headers=self.headers)
-        return parser.torrentParser(response)
+        return parser.torrentParser(response, page)
 
     #: Info of torrent
     def info(self, link, id=False):
