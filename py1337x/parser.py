@@ -13,7 +13,7 @@ def torrentParser(response, page=None):
     firstPage = soup.find('li', {'class': 'first'})
     lastPage = soup.find('li', {'class': 'last'})
 
-    if firstPage and not lastPage:
+    if not lastPage:
         pageCount = page
     else:
         pageCount = int(lastPage.findAll('a')[0]['href'].split('/')[-2]) if lastPage else 1
