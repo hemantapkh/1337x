@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-def torrentParser(response, page=None):
+def torrentParser(response, page=1):
     soup = BeautifulSoup(response.content, 'html.parser')
 
     torrentList = soup.select('a[href*="/torrent/"]')
@@ -16,7 +16,7 @@ def torrentParser(response, page=None):
     if not lastPage:
         pageCount = page
     else:
-        pageCount = int(lastPage.findAll('a')[0]['href'].split('/')[-2]) if lastPage else 1
+        pageCount = int(lastPage.findAll('a')[0]['href'].split('/')[-2])
 
     results = {'items': [], 'currentPage':page or 1, 'itemCount': len(torrentList), 'pageCount': pageCount}
 
@@ -60,7 +60,7 @@ def infoParser(response):
     infoHash = infoHash.find('span').getText() if infoHash else None
 
     descriptionList = soup.find_all('ul', {'class': 'list'})
-    if descriptionList:
+    if len(descriptionList) > 2: 
         firstList = descriptionList[1].find_all('li')
         secondList = descriptionList[2].find_all('li')
         
@@ -69,8 +69,8 @@ def infoParser(response):
         language = firstList[2].find('span').getText()
         size = firstList[3].find('span').getText()
         uploader = firstList[4].find('span').getText()
-        uploaderLink = firstList[4].find('a')['href']
-        uploaderLink = 'https://www.1337xx.to'+uploaderLink if uploaderLink else None
+        uploaderLink = 'https://www.1337xx.to/'+uploader+'/'
+        
         downloads = secondList[0].find('span').getText()
         lastChecked = secondList[1].find('span').getText()
         uploadDate = secondList[2].find('span').getText()
@@ -78,6 +78,6 @@ def infoParser(response):
         leechers = secondList[4].find('span').getText()
     
     else:
-        category = species =  language = size = uploader = uploaderLink = downloads = lastChecked = uploadDate = seeders = leechers = None
-
+        category = species = language = size = uploader = uploaderLink = downloads = lastChecked = uploadDate = seeders = leechers = None
+    
     return {'name': name, 'shortName': shortName, 'description': description, 'category': category, 'type': species, 'genre': genre, 'language': language, 'size': size, 'image': image, 'uploader': uploader, 'uploaderLink': uploaderLink, 'downloads': downloads, 'lastChecked': lastChecked, 'uploadDate': uploadDate, 'seeders': seeders, 'leechers': leechers, 'magnetLink': magnetLink, 'infoHash': infoHash}
