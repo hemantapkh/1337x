@@ -30,8 +30,9 @@ def torrentParser(response, page=1):
             size = sizeList[count].getText()
             time = timeList[count].getText()
             uploader = uploaderList[count].getText()
+            uploaderLink = 'https://www.1337xx.to/'+uploader+'/'
             
-            results['items'].append({'name': name, 'id': torrentId, 'link': link, 'seeders': seeders, 'leechers': leechers, 'size': size, 'time': time, 'uploader': uploader})
+            results['items'].append({'name': name, 'id': torrentId, 'link': link, 'seeders': seeders, 'leechers': leechers, 'size': size, 'time': time, 'uploader': uploader, 'uploaderLink': uploaderLink})
 
     return results
 
