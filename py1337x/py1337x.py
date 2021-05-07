@@ -30,7 +30,7 @@ class py1337x():
     
     #: Top 100 torrents
     def top(self, category=None):
-        category = 'applications' if category.lower() == 'apps' else 'television' if category.lower() == 'tv' else category.lower()
+        category = 'applications' if category.lower() == 'apps' else 'television' if category.lower() == 'tv' else category.lower() if category else None
         url = f"{self.baseUrl}/top-100{'-'+category if category else ''}"
         
         response = requests.get(url, headers=self.headers)
