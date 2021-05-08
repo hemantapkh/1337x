@@ -52,8 +52,13 @@ class py1337x():
         return parser.torrentParser(response, page)
 
     #: Info of torrent
-    def info(self, link, id=False):
-        link = f'{self.baseUrl}/torrent/{link}/h9/'
+    def info(self, link=None, torrentId=None):
+        if not link and not torrentId:
+            raise TypeError('Missing 1 required positional argument: link or torrentId')
+        elif link and torrentId:
+            raise TypeError('Got an unexpected argument: Pass either link or torrentId')
+        
+        link = f'{self.baseUrl}/torrent/{torrentId}/h9/' if torrentId else link
         response = requests.get(link, headers=self.headers)
 
         return parser.infoParser(response)
