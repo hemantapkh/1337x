@@ -1,7 +1,7 @@
 
 <h2 align='center'>✖️Unofficial Python API Wrapper of 1337x</h2>
 <p align="center">
-<img src="images/1337x.png" align="center" height=205 alt="1337x" />
+<img src="https://github.com/hemantapkh/1337x/blob/main/images/1337x.png?raw=true" align="center" height=205 alt="1337x" />
 </p>
 <p align="center">
 <a href="https://pypi.org/1337x">
