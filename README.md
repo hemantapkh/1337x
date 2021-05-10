@@ -56,15 +56,18 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 ```python
 >>> from py1337x import py1337x
 
->>> torrents = py1337x(proxy='1337x.tw') # Using 1337x.tw
+# Using 1337x.tw
+>>> torrents = py1337x(proxy='1337x.tw')
 
 >>> torrents.search('harry potter')
 {'items': [...], 'currentPage': 1, 'itemCount': 20, 'pageCount': 50}
 
->>> torrents.search('harry potter', category='movies', sortBy='seeders', order='desc') # Searching harry potter in category movies and sort by seeders in descending order
+# Searching harry potter in category movies and sort by seeders in descending order
+>>> torrents.search('harry potter', category='movies', sortBy='seeders', order='desc') 
 {'items': [...], 'currentPage': 1, 'itemCount': 40, 'pageCount': 50}
 
->>> torrents.search('harry potter', page=5) # Viewing the 5th page of the result
+# Viewing the 5th page of the result
+>>> torrents.search('harry potter', page=5) 
 {'items': [...], 'currentPage': , 'itemCount': 20, 'pageCount': 50}
 ```
 
@@ -73,18 +76,23 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 ```python
 >>> from py1337x import py1337x
 
->>> torrents = py1337x(proxy=None) # Using default proxy (1337xx.to)
+# Using default proxy (1337xx.to)
+>>> torrents = py1337x(proxy=None) 
 
->>> torrents.trending() # Today's trending torrents of all category
+# Today's trending torrents of all category
+>>> torrents.trending() 
 {'items': [...], 'currentPage': 1, 'itemCount': 50, 'pageCount': 1}
 
->>> torrents.trending(week=True) # Trending torrents this week of all category
+# Trending torrents this week of all category
+>>> torrents.trending(week=True) 
 {'items': [...], 'currentPage': 1, 'itemCount': 50, 'pageCount': 1}
 
->>> torrents.trending(category='anime') # Todays trending anime 
+# Todays trending anime 
+>>> torrents.trending(category='anime') 
 {'items': [...], 'currentPage': 1, 'itemCount': 50, 'pageCount': 1}
 
->>> torrents.trending(category='anime', week=True) # Trending anime this week
+# Trending anime this week
+>>> torrents.trending(category='anime', week=True) 
 {'items': [...], 'currentPage': 1, 'itemCount': 50, 'pageCount': 1}
 ```
 
@@ -94,10 +102,12 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 
 >>> torrents = py1337x()
 
->>> torrents.info(link='https://www.1337xx.to/torrent/258188/h9/') # Getting the information of a torrent by its link
+# Getting the information of a torrent by its link
+>>> torrents.info(link='https://www.1337xx.to/torrent/258188/h9/') 
 {'name': 'Harry Potter and the Half-Blood Prince', 'shortName': 'Harry Potter', 'description': "....", 'category': 'Movies', 'type': 'HD', 'genre': ['Adventure', 'Fantasy', 'Family'], 'language': 'English', 'size': '3.0 GB', 'image': '...', 'uploader': ' ...', 'uploaderLink': '...', 'downloads': '5310', 'lastChecked': '44 seconds ago', 'uploadDate': '4 years ago', 'seeders': '36', 'leechers': '3', 'magnetLink': '...', 'infoHash': '...'}
 
->>> torrents.info(torrentId='258188') # Getting the information of a torrent by its link
+# Getting the information of a torrent by its link
+>>> torrents.info(torrentId='258188') 
 {'name': 'Harry Potter and the Half-Blood Prince', 'shortName': 'Harry Potter', 'description': "....", 'category': 'Movies', 'type': 'HD', 'genre': ['Adventure', 'Fantasy', 'Family'], 'language': 'English', 'size': '3.0 GB', 'image': '...', 'uploader': ' ...', 'uploaderLink': '...', 'downloads': '5310', 'lastChecked': '44 seconds ago', 'uploadDate': '4 years ago', 'seeders': '36', 'leechers': '3', 'magnetLink': '...', 'infoHash': '...'}
 ```
 
