@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-def torrentParser(response, page=1):
+def torrentParser(response, baseUrl, page=1):
     soup = BeautifulSoup(response.content, 'html.parser')
 
     torrentList = soup.select('a[href*="/torrent/"]')
@@ -24,19 +24,19 @@ def torrentParser(response, page=1):
         for count,torrent in enumerate(torrentList):
             name = torrent.getText().strip()
             torrentId = torrent['href'].split('/')[2]
-            link = 'https://www.1337xx.to'+ torrent['href']
+            link = baseUrl+torrent['href']
             seeders = seedersList[count].getText()
             leechers = leechersList[count].getText()
             size = sizeList[count].contents[0]
             time = timeList[count].getText()
-            uploader = uploaderList[count].getText()
-            uploaderLink = 'https://www.1337xx.to/'+uploader+'/'
+            uploader = uploaderList[count].getText().strip()
+            uploaderLink = baseUrl+'/'+uploader+'/'
             
             results['items'].append({'name': name, 'torrentId': torrentId, 'link': link, 'seeders': seeders, 'leechers': leechers, 'size': size, 'time': time, 'uploader': uploader, 'uploaderLink': uploaderLink})
 
     return results
 
-def infoParser(response):
+def infoParser(response, baseUrl):
     soup = BeautifulSoup(response.content, 'html.parser')
 
     name = soup.find('div', {'class': 'box-info-heading clearfix'})
@@ -54,6 +54,9 @@ def infoParser(response):
     image = soup.find('div', {'class': 'torrent-image'})
     image = image.find('img')['src'] if image else None
 
+    if image and not ( image.startswith('http:') or image.startswith('https:')):
+        image = 'https:'+image
+
     magnetLink = soup.select('a[href^="magnet"]')
     magnetLink = magnetLink[0]['href'] if magnetLink else None
 
@@ -69,8 +72,8 @@ def infoParser(response):
         species = firstList[1].find('span').getText()
         language = firstList[2].find('span').getText()
         size = firstList[3].find('span').getText()
-        uploader = firstList[4].find('span').getText()
-        uploaderLink = 'https://www.1337xx.to/'+uploader+'/'
+        uploader = firstList[4].find('span').getText().strip()
+        uploaderLink = baseUrl+'/'+uploader+'/'
         
         downloads = secondList[0].find('span').getText()
         lastChecked = secondList[1].find('span').getText()

@@ -19,14 +19,14 @@ class py1337x():
         url = f"{self.baseUrl}/{'sort-' if sortBy else ''}{'category-' if category else ''}search/{query}/{category+'/' if category else ''}{sortBy.lower()+'/' if sortBy else ''}{order.lower()+'/' if sortBy else ''}{page}/"
 
         response = requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, page)
+        return parser.torrentParser(response, baseUrl=self.baseUrl, page=page)
 
     #: Trending torrents
     def trending(self, category=None, week=False):
         url = f"{self.baseUrl}/trending{'-week' if week and not category else ''}{'/w/'+category.lower()+'/' if week and category else '/d/'+category.lower()+'/' if not week and category else ''}"
         
         response = requests.get(url, headers=self.headers)
-        return parser.torrentParser(response)
+        return parser.torrentParser(response, baseUrl=self.baseUrl)
     
     #: Top 100 torrents
     def top(self, category=None):
@@ -34,14 +34,14 @@ class py1337x():
         url = f"{self.baseUrl}/top-100{'-'+category if category else ''}"
         
         response = requests.get(url, headers=self.headers)
-        return parser.torrentParser(response)
+        return parser.torrentParser(response, baseUrl=self.baseUrl)
     
     #: Popular torrents
     def popular(self, category, week=False):
         url = f"{self.baseUrl}/popular-{category.lower()}{'-week' if week else ''}"
 
         response = requests.get(url, headers=self.headers)
-        return parser.torrentParser(response)
+        return parser.torrentParser(response, baseUrl=self.baseUrl)
 
     #: Browse torrents by category type
     def browse(self, category, page=1):
@@ -49,7 +49,7 @@ class py1337x():
         url = f'{self.baseUrl}/cat/{category}/{page}/'
 
         response = requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, page)
+        return parser.torrentParser(response, baseUrl=self.baseUrl, page=page)
 
     #: Info of torrent
     def info(self, link=None, torrentId=None):
@@ -61,4 +61,4 @@ class py1337x():
         link = f'{self.baseUrl}/torrent/{torrentId}/h9/' if torrentId else link
         response = requests.get(link, headers=self.headers)
 
-        return parser.infoParser(response)
+        return parser.infoParser(response, baseUrl=self.baseUrl)
