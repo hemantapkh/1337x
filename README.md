@@ -76,7 +76,7 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 ```python
 >>> from py1337x import py1337x
 
-# Using default proxy (1337xx.to)
+# Using the default proxy (1337x.to)
 >>> torrents = py1337x(proxy=None) 
 
 # Today's trending torrents of all category
@@ -98,9 +98,11 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 
 #### 3. Getting information of a torrent
 ```python
+
+# Using 1337xx.to
 >>> from py1337x import py1337x
 
->>> torrents = py1337x()
+>>> torrents = py1337x('1337xx.to')
 
 # Getting the information of a torrent by its link
 >>> torrents.info(link='https://www.1337xx.to/torrent/258188/h9/') 
