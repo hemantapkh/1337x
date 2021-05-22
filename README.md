@@ -108,7 +108,7 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 
 # Getting the information of a torrent by its link
 >>> torrents.info(torrentId='258188') 
-{'name': 'Harry Potter and the Half-Blood Prince', 'shortName': 'Harry Potter', 'description': "....", 'category': 'Movies', 'type': 'HD', 'genre': ['Adventure', 'Fantasy', 'Family'], 'language': 'English', 'size': '3.0 GB', 'image': '...', 'uploader': ' ...', 'uploaderLink': '...', 'downloads': '5310', 'lastChecked': '44 seconds ago', 'uploadDate': '4 years ago', 'seeders': '36', 'leechers': '3', 'magnetLink': '...', 'infoHash': '...'}
+{'name': 'Harry Potter and the Half-Blood Prince', 'shortName': 'Harry Potter', 'description': "....", 'category': 'Movies', 'type': 'HD', 'genre': ['Adventure', 'Fantasy', 'Family'], 'language': 'English', 'size': '3.0 GB', 'thumbnail': '...', 'images': [...], 'uploader': ' ...', 'uploaderLink': '...', 'downloads': '5310', 'lastChecked': '44 seconds ago', 'uploadDate': '4 years ago', 'seeders': '36', 'leechers': '3', 'magnetLink': '...', 'infoHash': '...'}
 ```
 
 ## Detailed documentation
