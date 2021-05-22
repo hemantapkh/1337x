@@ -51,17 +51,20 @@ def infoParser(response, baseUrl):
     genre = soup.find('div', {'class': 'torrent-category clearfix'})
     genre = [i.text for i in genre.find_all('span')] if genre else None
 
-    image = soup.find('div', {'class': 'torrent-image'})
-    image = image.find('img')['src'] if image else None
+    thumbnail = soup.find('div', {'class': 'torrent-image'})
+    thumbnail = thumbnail.find('img')['src'] if thumbnail else None
 
-    if image and not ( image.startswith('http:') or image.startswith('https:')):
-        image = 'https:'+image
+    if thumbnail and not ( thumbnail.startswith('http:') or thumbnail.startswith('https:')):
+        thumbnail = 'https:'+thumbnail
 
     magnetLink = soup.select('a[href^="magnet"]')
     magnetLink = magnetLink[0]['href'] if magnetLink else None
 
     infoHash = soup.find('div', {'class': 'infohash-box'})
     infoHash = infoHash.find('span').getText() if infoHash else None
+
+    images = soup.find('div', {'class': 'tab-pane active'})
+    images = [i['data-original'] for i in images.find_all('img')] if images else None
 
     descriptionList = soup.find_all('ul', {'class': 'list'})
     if len(descriptionList) > 2: 
@@ -84,4 +87,4 @@ def infoParser(response, baseUrl):
     else:
         category = species = language = size = uploader = uploaderLink = downloads = lastChecked = uploadDate = seeders = leechers = None
     
-    return {'name': name, 'shortName': shortName, 'description': description, 'category': category, 'type': species, 'genre': genre, 'language': language, 'size': size, 'image': image, 'uploader': uploader, 'uploaderLink': uploaderLink, 'downloads': downloads, 'lastChecked': lastChecked, 'uploadDate': uploadDate, 'seeders': seeders, 'leechers': leechers, 'magnetLink': magnetLink, 'infoHash': infoHash}
+    return {'name': name, 'shortName': shortName, 'description': description, 'category': category, 'type': species, 'genre': genre, 'language': language, 'size': size, 'thumbnail': thumbnail, 'images': images if images else None, 'uploader': uploader, 'uploaderLink': uploaderLink, 'downloads': downloads, 'lastChecked': lastChecked, 'uploadDate': uploadDate, 'seeders': seeders, 'leechers': leechers, 'magnetLink': magnetLink, 'infoHash': infoHash}
