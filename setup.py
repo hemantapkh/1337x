@@ -11,7 +11,7 @@ setuptools.setup(
     description="Unofficial API of 1337x.to",
     long_description=readme,
     long_description_content_type="text/markdown",
-    install_requires=["requests","bs4"],
+    install_requires=["requests","bs4", "requests-cache"],
     url="https://github.com/hemantapkh/1337x",
     project_urls={
         "Documentation": "https://github.com/hemantapkh/1337x/blob/main/README.md",
