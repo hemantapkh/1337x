@@ -1,8 +1,9 @@
 import requests
+import requests_cache
 from py1337x import parser
 
 class py1337x():
-    def __init__(self, proxy=None):
+    def __init__(self, proxy=None, cache=None, cacheTime=86400):
         self.baseUrl = f'https://www.{proxy}' if proxy else 'https://www.1337x.to'
         self.headers = {
             'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0',
@@ -11,6 +12,8 @@ class py1337x():
             'upgrade-insecure-requests': '1',
             'te': 'trailers'
         }
+
+        self.requests = requests_cache.CachedSession(cache, expire_after=cacheTime) if cache else requests
     
     #: Searching torrents
     def search(self, query, page=1, category=None, sortBy=None, order='desc'):
@@ -18,14 +21,14 @@ class py1337x():
         category = category.upper() if category and category.lower() in ['xxx', 'tv'] else category.capitalize() if category else None
         url = f"{self.baseUrl}/{'sort-' if sortBy else ''}{'category-' if category else ''}search/{query}/{category+'/' if category else ''}{sortBy.lower()+'/' if sortBy else ''}{order.lower()+'/' if sortBy else ''}{page}/"
 
-        response = requests.get(url, headers=self.headers)
+        response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl, page=page)
 
     #: Trending torrents
     def trending(self, category=None, week=False):
         url = f"{self.baseUrl}/trending{'-week' if week and not category else ''}{'/w/'+category.lower()+'/' if week and category else '/d/'+category.lower()+'/' if not week and category else ''}"
         
-        response = requests.get(url, headers=self.headers)
+        response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl)
     
     #: Top 100 torrents
@@ -33,14 +36,14 @@ class py1337x():
         category = 'applications' if category and category.lower() == 'apps' else 'television' if category and category.lower() == 'tv' else category.lower() if category else None
         url = f"{self.baseUrl}/top-100{'-'+category if category else ''}"
         
-        response = requests.get(url, headers=self.headers)
+        response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl)
     
     #: Popular torrents
     def popular(self, category, week=False):
         url = f"{self.baseUrl}/popular-{category.lower()}{'-week' if week else ''}"
 
-        response = requests.get(url, headers=self.headers)
+        response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl)
 
     #: Browse torrents by category type
@@ -48,7 +51,7 @@ class py1337x():
         category = category.upper() if category.lower() in ['xxx', 'tv'] else category.capitalize()
         url = f'{self.baseUrl}/cat/{category}/{page}/'
 
-        response = requests.get(url, headers=self.headers)
+        response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl, page=page)
 
     #: Info of torrent
@@ -59,6 +62,6 @@ class py1337x():
             raise TypeError('Got an unexpected argument: Pass either link or torrentId')
         
         link = f'{self.baseUrl}/torrent/{torrentId}/h9/' if torrentId else link
-        response = requests.get(link, headers=self.headers)
+        response = self.requests.get(link, headers=self.headers)
 
         return parser.infoParser(response, baseUrl=self.baseUrl)
