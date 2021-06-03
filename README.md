@@ -30,6 +30,7 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
      - [Getting Trending Torrents](#2-getting-trending-torrents)
      - [Getting information of a torrent](#3-getting-information-of-a-torrent)
 - [Detailed Documentation](#detailed-documentation)
+   - [Available attributes](#available-attributes)
    - [Available methods](#available-methods)      
    - [Available category](#available-categories)
    - [Available sorting methods](#available-sorting-methods)
@@ -56,8 +57,8 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 ```python
 >>> from py1337x import py1337x
 
-# Using 1337x.tw
->>> torrents = py1337x(proxy='1337x.tw')
+# Using 1337x.tw and saving the cache in Desktop which expires after 500 seconds
+>>> torrents = py1337x(proxy='1337x.tw', cache='/home/user/Desktop/cache', cacheTime=500)
 
 >>> torrents.search('harry potter')
 {'items': [...], 'currentPage': 1, 'itemCount': 20, 'pageCount': 50}
@@ -76,7 +77,7 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 ```python
 >>> from py1337x import py1337x
 
-# Using the default proxy (1337x.to)
+# Using the default proxy (1337x.to) - (Without using cache)
 >>> torrents = py1337x(proxy=None) 
 
 # Today's trending torrents of all category
@@ -106,7 +107,7 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 
 # Getting the information of a torrent by its link
 >>> torrents.info(link='https://www.1337xx.to/torrent/258188/h9/') 
-{'name': 'Harry Potter and the Half-Blood Prince', 'shortName': 'Harry Potter', 'description': "....", 'category': 'Movies', 'type': 'HD', 'genre': ['Adventure', 'Fantasy', 'Family'], 'language': 'English', 'size': '3.0 GB', 'image': '...', 'uploader': ' ...', 'uploaderLink': '...', 'downloads': '5310', 'lastChecked': '44 seconds ago', 'uploadDate': '4 years ago', 'seeders': '36', 'leechers': '3', 'magnetLink': '...', 'infoHash': '...'}
+{'name': 'Harry Potter and the Half-Blood Prince', 'shortName': 'Harry Potter', 'description': "....", 'category': 'Movies', 'type': 'HD', 'genre': ['Adventure', 'Fantasy', 'Family'], 'language': 'English', 'size': '3.0 GB', 'thumbnail': '...', 'images': [...], 'uploader': ' ...', 'uploaderLink': '...', 'downloads': '5310', 'lastChecked': '44 seconds ago', 'uploadDate': '4 years ago', 'seeders': '36', 'leechers': '3', 'magnetLink': '...', 'infoHash': '...'}
 
 # Getting the information of a torrent by its link
 >>> torrents.info(torrentId='258188') 
@@ -115,7 +116,64 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 
 ## Detailed documentation
 
-### Available methods
+## Available attributes
+
+```python
+from py1337x import py1337x
+
+torrents = py1337x(proxy='1337x.to', cache='py1337xCache', cacheTime=86400, backend='sqlite')
+```
+
+**Proxy**
+
+If the default domain is banned in your country, you can use an alternative domain of 1337x. 
+
+- [`1337x.to`](https://1337x.to) (**default**)
+- [`1337x.st`](https://1337x.st)
+- [`x1337x.ws`](https://x1337x.ws)
+- [`x1337x.eu`](https://x1337x.eu)
+- [`x1337x.se`](https://x1337x.se)
+- [`1337x.is`](https://1337x.is)
+- [`1337x.gd`](https://1337x.gd)
+
+**cache** 
+
+Py1337x uses [requests-cache](https://pypi.org/project/requests-cache/) for caching to store data so that future requests for that data can be served faster. `cache` can be any of the following.
+
+- A boolean value: `True` for using cache and `False` for not using cache. (**cache is not used by default**)
+- Directory for storing the cache.
+
+**cacheTime**
+
+By default the cache expires after one day. You can change the cache expiration time by setting a custom `cacheTime`. 
+
+- `-1` (to never expire)
+
+- `0` (to “expire immediately,” e.g. bypass the cache)
+
+- A positive number (in seconds [**defaults to 86400**])
+
+- A [`timedelta`](https://docs.python.org/3/library/datetime.html#datetime.timedelta)
+
+- A [`datetime`](https://docs.python.org/3/library/datetime.html#datetime.datetime)
+
+**backend**
+
+The backend for storing the cache can be any of the following.
+
+- `'sqlite'`: SQLite database (**default**)
+
+- `'redis'`: Redis cache (`requires redis`)
+
+- `'mongodb'`: MongoDB database (`requires pymongo`)
+
+- `'gridfs'`: GridFS collections on a MongoDB database (`requires pymongo`)
+
+- `'dynamodb'`: Amazon DynamoDB database (`requires boto3`)
+
+- `'memory'`: A non-persistent cache that just stores responses in memory
+
+## Available methods
 
 ```python
 from py1337x import py1337x
