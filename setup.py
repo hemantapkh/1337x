@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="1337x", 
-    version="1.0.2",
+    version="1.1.0",
     author="Hemanta Pokharel",
     author_email="hemantapkh@yahoo.com",
     description="Unofficial API of 1337x.to",
@@ -19,7 +19,7 @@ setuptools.setup(
       },
     packages=setuptools.find_packages(),
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
