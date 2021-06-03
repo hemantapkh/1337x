@@ -3,7 +3,7 @@ import requests_cache
 from py1337x import parser
 
 class py1337x():
-    def __init__(self, proxy=None, cache=None, cacheTime=86400):
+    def __init__(self, proxy=None, cache=None, cacheTime=86400, backend='sqlite'):
         self.baseUrl = f'https://www.{proxy}' if proxy else 'https://www.1337x.to'
         self.headers = {
             'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0',
@@ -13,7 +13,7 @@ class py1337x():
             'te': 'trailers'
         }
 
-        self.requests = requests_cache.CachedSession(cache, expire_after=cacheTime) if cache else requests
+        self.requests = requests_cache.CachedSession(cache, expire_after=cacheTime, backend=backend) if cache else requests
     
     #: Searching torrents
     def search(self, query, page=1, category=None, sortBy=None, order='desc'):
