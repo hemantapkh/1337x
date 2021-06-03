@@ -3,15 +3,18 @@ import requests_cache
 from py1337x import parser
 
 class py1337x():
-    def __init__(self, proxy=None, cache=None, cacheTime=86400, backend='sqlite'):
+    def __init__(self, proxy=None, cookie=None, cache=None, cacheTime=86400, backend='sqlite'):
         self.baseUrl = f'https://www.{proxy}' if proxy else 'https://www.1337x.to'
         self.headers = {
-            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0',
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0',
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'accept-language': 'en-US,en;q=0.5',
             'upgrade-insecure-requests': '1',
             'te': 'trailers'
         }
+
+        if cookie:
+            self.headers['cookie'] = f'cf_clearance={cookie}'
 
         self.requests = requests_cache.CachedSession(cache, expire_after=cacheTime, backend=backend) if cache else requests
     
