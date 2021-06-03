@@ -19,7 +19,7 @@
 </a>
 
 <p align="center">
-This is the unofficial API of 1337x. It supports all proxies of 1337x and almost all functions of 1337x. You can search, get trending, top and popular torrents. Furthermore, you can browse torrents of a certain category. It also supports filtering on result by category and supports sorting too.
+This is the unofficial API of 1337x. It supports all proxies of 1337x and almost all functions of 1337x. You can search, get trending, top and popular torrents. Furthermore, you can browse torrents of a certain category. It also supports filtering on result by category, supports sorting and caching.
 <p align="center">
 
 ## Table of Contents
@@ -77,8 +77,8 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 ```python
 >>> from py1337x import py1337x
 
-# Using the default proxy (1337x.to) - (Without using cache)
->>> torrents = py1337x(proxy=None) 
+# Using the default proxy (1337x.to) Without using cache
+>>> torrents = py1337x() 
 
 # Today's trending torrents of all category
 >>> torrents.trending() 
@@ -100,10 +100,10 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 #### 3. Getting information of a torrent
 ```python
 
-# Using 1337xx.to
 >>> from py1337x import py1337x
 
->>> torrents = py1337x('1337xx.to')
+# Using 11337x.st and passing the cookie since 11337x.st is cloudflare protected
+>>> torrents = py1337x('11337x.st', cookie='<cookie>')
 
 # Getting the information of a torrent by its link
 >>> torrents.info(link='https://www.1337xx.to/torrent/258188/h9/') 
@@ -121,7 +121,7 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 ```python
 from py1337x import py1337x
 
-torrents = py1337x(proxy='1337x.to', cache='py1337xCache', cacheTime=86400, backend='sqlite')
+torrents = py1337x(proxy='1337x.st', cookie='<cookie>', cache='py1337xCache', cacheTime=86400, backend='sqlite')
 ```
 
 **Proxy**
@@ -129,12 +129,22 @@ torrents = py1337x(proxy='1337x.to', cache='py1337xCache', cacheTime=86400, back
 If the default domain is banned in your country, you can use an alternative domain of 1337x. 
 
 - [`1337x.to`](https://1337x.to) (**default**)
+- [`1337x.tw`](https://www.1337x.tw)
+- [`1377x.to`](https://www.1377x.to)
+- [`1337xx.to`](https://www.1337xx.to)
 - [`1337x.st`](https://1337x.st)
 - [`x1337x.ws`](https://x1337x.ws)
 - [`x1337x.eu`](https://x1337x.eu)
 - [`x1337x.se`](https://x1337x.se)
 - [`1337x.is`](https://1337x.is)
 - [`1337x.gd`](https://1337x.gd)
+
+**cookie**
+
+Some of the proxies are protected with Cloudflare. For such proxies you need to pass a cookie value. To get a cookie go the the protected site from your browser, solve the captcha and copy the value of `cf_clearance`.
+
+``Firefox: Inspect element > Storage > Cookies`` <br>
+``Chrome: Inspect element > Application > Storage > Cookies``
 
 **cache** 
 
