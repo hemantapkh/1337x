@@ -192,27 +192,27 @@ torrents&#46;info(link or torrentId)          | Get information of a torrent    
 
 ### Available categories
 
- - movies
- - tv
- - games
- - music
- - apps
- - anime
- - documentaries
- - xxx
- - others
+ - `'movies'`
+ - `'tv'`
+ - `'games'`
+ - `'music'`
+ - `'apps'`
+ - `'anime'`
+ - `'documentaries'`
+ - `'xxx'`
+ - `'others'`
 
 ### Available sorting methods
 
-- time
-- size
-- seeders
-- leechers
+- `'time'`
+- `'size'`
+- `'seeders'`
+- `'leechers'`
 
 ### Available sorting order
 
-- desc (for descending order)
-- asc (for ascending order)
+- `'desc'` (for descending order)
+- `'asc'` (for ascending order)
 
 ## Contributing
 
