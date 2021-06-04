@@ -4,10 +4,10 @@
 <img src="https://github.com/hemantapkh/1337x/blob/main/images/1337x.png?raw=true" align="center" height=205 alt="1337x" />
 </p>
 <p align="center">
-<a href="https://pypi.org/1337x">
+<a href="https://pypi.org/project/1337x">
 <img src='https://img.shields.io/pypi/v/1337x.svg'>
 </a>
-<a href="https://pypi.org/1337x">
+<a href="https://pepy.tech/project/1337x">
 <img src='https://pepy.tech/badge/1337x'>
 </a>
 <img src='https://visitor-badge.laobi.icu/badge?page_id=hemantapkh.1337x'>
