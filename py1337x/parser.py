@@ -15,7 +15,11 @@ def torrentParser(response, baseUrl, page=1):
     if not lastPage:
         pageCount = page
     else:
-        pageCount = int(lastPage.findAll('a')[-1].text)
+        try:
+            pageCount = int(lastPage.findAll('a')[-1]['href'].split('/')[-2])
+        
+        except Exception:
+            pageCount = page
 
     results = {'items': [], 'currentPage':page or 1, 'itemCount': len(torrentList), 'pageCount': pageCount}
 
