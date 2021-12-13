@@ -10,13 +10,12 @@ def torrentParser(response, baseUrl, page=1):
     timeList = soup.select('td.coll-date')
     uploaderList = soup.select('td.coll-5')
 
-    firstPage = soup.find('li', {'class': 'first'})
-    lastPage = soup.find('li', {'class': 'last'})
+    lastPage = soup.find('div', {'class': 'pagination'})
 
     if not lastPage:
         pageCount = page
     else:
-        pageCount = int(lastPage.findAll('a')[0]['href'].split('/')[-2])
+        pageCount = int(lastPage.findAll('a')[-1].text)
 
     results = {'items': [], 'currentPage':page or 1, 'itemCount': len(torrentList), 'pageCount': pageCount}
 
@@ -54,8 +53,8 @@ def infoParser(response, baseUrl):
     thumbnail = soup.find('div', {'class': 'torrent-image'})
     thumbnail = thumbnail.find('img')['src'] if thumbnail else None
 
-    if thumbnail and not ( thumbnail.startswith('http:') or thumbnail.startswith('https:')):
-        thumbnail = 'https:'+thumbnail
+    if thumbnail and not thumbnail.startswith(f'http'):
+        thumbnail = f'{baseUrl}'+thumbnail
 
     magnetLink = soup.select('a[href^="magnet"]')
     magnetLink = magnetLink[0]['href'] if magnetLink else None
@@ -64,7 +63,7 @@ def infoParser(response, baseUrl):
     infoHash = infoHash.find('span').getText() if infoHash else None
 
     images = soup.find('div', {'class': 'tab-pane active'})
-    images = [i['data-original'] for i in images.find_all('img')] if images else None
+    images = [i['src'] for i in images.find_all('img')] if images else None
 
     descriptionList = soup.find_all('ul', {'class': 'list'})
     if len(descriptionList) > 2: 
@@ -87,4 +86,4 @@ def infoParser(response, baseUrl):
     else:
         category = species = language = size = uploader = uploaderLink = downloads = lastChecked = uploadDate = seeders = leechers = None
     
-    return {'name': name, 'shortName': shortName, 'description': description, 'category': category, 'type': species, 'genre': genre, 'language': language, 'size': size, 'thumbnail': thumbnail, 'images': images if images else None, 'uploader': uploader, 'uploaderLink': uploaderLink, 'downloads': downloads, 'lastChecked': lastChecked, 'uploadDate': uploadDate, 'seeders': seeders, 'leechers': leechers, 'magnetLink': magnetLink, 'infoHash': infoHash}
+    return {'name': name, 'shortName': shortName, 'description': description, 'category': category, 'type': species, 'genre': genre, 'language': language, 'size': size, 'thumbnail': thumbnail, 'images': images if images else None, 'uploader': uploader, 'uploaderLink': uploaderLink, 'downloads': downloads, 'lastChecked': lastChecked, 'uploadDate': uploadDate, 'seeders': seeders, 'leechers': leechers, 'magnetLink': magnetLink, 'infoHash': infoHash.strip() if infoHash else None}

@@ -4,7 +4,7 @@ from py1337x import parser
 
 class py1337x():
     def __init__(self, proxy=None, cookie=None, cache=None, cacheTime=86400, backend='sqlite'):
-        self.baseUrl = f'https://www.{proxy}' if proxy else 'https://www.1337x.to'
+        self.baseUrl = f'https://www.{proxy}' if proxy else 'https://www.1377x.to'
         self.headers = {
             'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0',
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
