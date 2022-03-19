@@ -2,6 +2,7 @@ import requests
 import requests_cache
 from py1337x import parser
 
+
 class py1337x():
     def __init__(self, proxy=None, cookie=None, cache=None, cacheTime=86400, backend='sqlite'):
         self.baseUrl = f'https://www.{proxy}' if proxy else 'https://www.1377x.to'
@@ -16,13 +17,20 @@ class py1337x():
         if cookie:
             self.headers['cookie'] = f'cf_clearance={cookie}'
 
-        self.requests = requests_cache.CachedSession(cache, expire_after=cacheTime, backend=backend) if cache else requests
-    
+        self.requests = requests_cache.CachedSession(
+            cache, expire_after=cacheTime, backend=backend) if cache else requests
+
     #: Searching torrents
     def search(self, query, page=1, category=None, sortBy=None, order='desc'):
-        query = '+'.join(query.split())
-        category = category.upper() if category and category.lower() in ['xxx', 'tv'] else category.capitalize() if category else None
-        url = f"{self.baseUrl}/{'sort-' if sortBy else ''}{'category-' if category else ''}search/{query}/{category+'/' if category else ''}{sortBy.lower()+'/' if sortBy else ''}{order.lower()+'/' if sortBy else ''}{page}/"
+        query = '%20'.join(query.split())
+        # category = category.upper() if category and category.lower() in [                  DONT KNOW WHAT THIS DOES SO DIDNT TOUCH IT
+        #     'xxx', 'tv'] else category.capitalize() if category else None
+        if category and sortBy:
+            url = f"{self.baseUrl}/sort-category-search/{query}/{category}/{sortBy}/{order}/{page}"
+        elif category:
+            url = f"{self.baseUrl}/category-search/{query}/{page}"
+        else:
+            url = f"{self.baseUrl}/search/{query}/{page}"
 
         response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl, page=page)
@@ -30,18 +38,19 @@ class py1337x():
     #: Trending torrents
     def trending(self, category=None, week=False):
         url = f"{self.baseUrl}/trending{'-week' if week and not category else ''}{'/w/'+category.lower()+'/' if week and category else '/d/'+category.lower()+'/' if not week and category else ''}"
-        
+
         response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl)
-    
+
     #: Top 100 torrents
     def top(self, category=None):
-        category = 'applications' if category and category.lower() == 'apps' else 'television' if category and category.lower() == 'tv' else category.lower() if category else None
+        category = 'applications' if category and category.lower(
+        ) == 'apps' else 'television' if category and category.lower() == 'tv' else category.lower() if category else None
         url = f"{self.baseUrl}/top-100{'-'+category if category else ''}"
-        
+
         response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl)
-    
+
     #: Popular torrents
     def popular(self, category, week=False):
         url = f"{self.baseUrl}/popular-{category.lower()}{'-week' if week else ''}"
@@ -51,7 +60,8 @@ class py1337x():
 
     #: Browse torrents by category type
     def browse(self, category, page=1):
-        category = category.upper() if category.lower() in ['xxx', 'tv'] else category.capitalize()
+        category = category.upper() if category.lower() in [
+            'xxx', 'tv'] else category.capitalize()
         url = f'{self.baseUrl}/cat/{category}/{page}/'
 
         response = self.requests.get(url, headers=self.headers)
@@ -60,10 +70,12 @@ class py1337x():
     #: Info of torrent
     def info(self, link=None, torrentId=None):
         if not link and not torrentId:
-            raise TypeError('Missing 1 required positional argument: link or torrentId')
+            raise TypeError(
+                'Missing 1 required positional argument: link or torrentId')
         elif link and torrentId:
-            raise TypeError('Got an unexpected argument: Pass either link or torrentId')
-        
+            raise TypeError(
+                'Got an unexpected argument: Pass either link or torrentId')
+
         link = f'{self.baseUrl}/torrent/{torrentId}/h9/' if torrentId else link
         response = self.requests.get(link, headers=self.headers)
 
