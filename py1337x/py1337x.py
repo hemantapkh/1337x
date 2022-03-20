@@ -29,6 +29,8 @@ class py1337x():
             url = f"{self.baseUrl}/sort-category-search/{query}/{category}/{sortBy}/{order}/{page}"
         elif category:
             url = f"{self.baseUrl}/category-search/{query}/{page}"
+        elif sortBy:
+            url = f"{self.baseUrl}/sort-search/{query}/{sortBy}/{order}/{page}"
         else:
             url = f"{self.baseUrl}/search/{query}/{page}"
 
