@@ -2,6 +2,7 @@ import requests
 import requests_cache
 from py1337x import parser
 
+
 class py1337x():
     def __init__(self, proxy=None, cookie=None, cache=None, cacheTime=86400, backend='sqlite'):
         self.baseUrl = f'https://www.{proxy}' if proxy else 'https://www.1377x.to'
@@ -17,7 +18,7 @@ class py1337x():
             self.headers['cookie'] = f'cf_clearance={cookie}'
 
         self.requests = requests_cache.CachedSession(cache, expire_after=cacheTime, backend=backend) if cache else requests
-    
+
     #: Searching torrents
     def search(self, query, page=1, category=None, sortBy=None, order='desc'):
         query = '+'.join(query.split())
@@ -30,18 +31,18 @@ class py1337x():
     #: Trending torrents
     def trending(self, category=None, week=False):
         url = f"{self.baseUrl}/trending{'-week' if week and not category else ''}{'/w/'+category.lower()+'/' if week and category else '/d/'+category.lower()+'/' if not week and category else ''}"
-        
+
         response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl)
-    
+
     #: Top 100 torrents
     def top(self, category=None):
         category = 'applications' if category and category.lower() == 'apps' else 'television' if category and category.lower() == 'tv' else category.lower() if category else None
         url = f"{self.baseUrl}/top-100{'-'+category if category else ''}"
-        
+
         response = self.requests.get(url, headers=self.headers)
         return parser.torrentParser(response, baseUrl=self.baseUrl)
-    
+
     #: Popular torrents
     def popular(self, category, week=False):
         url = f"{self.baseUrl}/popular-{category.lower()}{'-week' if week else ''}"
@@ -63,7 +64,7 @@ class py1337x():
             raise TypeError('Missing 1 required positional argument: link or torrentId')
         elif link and torrentId:
             raise TypeError('Got an unexpected argument: Pass either link or torrentId')
-        
+
         link = f'{self.baseUrl}/torrent/{torrentId}/h9/' if torrentId else link
         response = self.requests.get(link, headers=self.headers)
 

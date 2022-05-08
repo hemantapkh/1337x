@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 
+
 def torrentParser(response, baseUrl, page=1):
     soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -17,14 +18,19 @@ def torrentParser(response, baseUrl, page=1):
     else:
         try:
             pageCount = int(lastPage.findAll('a')[-1]['href'].split('/')[-2])
-        
+
         except Exception:
             pageCount = page
 
-    results = {'items': [], 'currentPage':page or 1, 'itemCount': len(torrentList), 'pageCount': pageCount}
+    results = {
+        'items': [],
+        'currentPage': page or 1,
+        'itemCount': len(torrentList),
+        'pageCount': pageCount
+    }
 
     if torrentList:
-        for count,torrent in enumerate(torrentList):
+        for count, torrent in enumerate(torrentList):
             name = torrent.getText().strip()
             torrentId = torrent['href'].split('/')[2]
             link = baseUrl+torrent['href']
@@ -34,30 +40,41 @@ def torrentParser(response, baseUrl, page=1):
             time = timeList[count].getText()
             uploader = uploaderList[count].getText().strip()
             uploaderLink = baseUrl+'/'+uploader+'/'
-            
-            results['items'].append({'name': name, 'torrentId': torrentId, 'link': link, 'seeders': seeders, 'leechers': leechers, 'size': size, 'time': time, 'uploader': uploader, 'uploaderLink': uploaderLink})
+
+            results['items'].append({
+                'name': name,
+                'torrentId': torrentId,
+                'link': link,
+                'seeders': seeders,
+                'leechers': leechers,
+                'size': size,
+                'time': time,
+                'uploader': uploader,
+                'uploaderLink': uploaderLink
+            })
 
     return results
+
 
 def infoParser(response, baseUrl):
     soup = BeautifulSoup(response.content, 'html.parser')
 
     name = soup.find('div', {'class': 'box-info-heading clearfix'})
     name = name.text.strip() if name else None
-    
-    shortName =  soup.find('div', {'class': 'torrent-detail-info'})
-    shortName = shortName.find('h3').getText() if shortName else None
+
+    shortName = soup.find('div', {'class': 'torrent-detail-info'})
+    shortName = shortName.find('h3').getText().strip() if shortName else None
 
     description = soup.find('div', {'class': 'torrent-detail-info'})
     description = description.find('p').getText().strip() if description else None
 
     genre = soup.find('div', {'class': 'torrent-category clearfix'})
-    genre = [i.text for i in genre.find_all('span')] if genre else None
+    genre = [i.text.strip() for i in genre.find_all('span')] if genre else None
 
     thumbnail = soup.find('div', {'class': 'torrent-image'})
     thumbnail = thumbnail.find('img')['src'] if thumbnail else None
 
-    if thumbnail and not thumbnail.startswith(f'http'):
+    if thumbnail and not thumbnail.startswith('http'):
         thumbnail = f'{baseUrl}'+thumbnail
 
     magnetLink = soup.select('a[href^="magnet"]')
@@ -70,24 +87,45 @@ def infoParser(response, baseUrl):
     images = [i['src'] for i in images.find_all('img')] if images else None
 
     descriptionList = soup.find_all('ul', {'class': 'list'})
-    if len(descriptionList) > 2: 
+
+    if len(descriptionList) > 2:
         firstList = descriptionList[1].find_all('li')
         secondList = descriptionList[2].find_all('li')
-        
+
         category = firstList[0].find('span').getText()
         species = firstList[1].find('span').getText()
         language = firstList[2].find('span').getText()
         size = firstList[3].find('span').getText()
         uploader = firstList[4].find('span').getText().strip()
         uploaderLink = baseUrl+'/'+uploader+'/'
-        
+
         downloads = secondList[0].find('span').getText()
         lastChecked = secondList[1].find('span').getText()
         uploadDate = secondList[2].find('span').getText()
         seeders = secondList[3].find('span').getText()
         leechers = secondList[4].find('span').getText()
-    
+
     else:
         category = species = language = size = uploader = uploaderLink = downloads = lastChecked = uploadDate = seeders = leechers = None
-    
-    return {'name': name, 'shortName': shortName, 'description': description, 'category': category, 'type': species, 'genre': genre, 'language': language, 'size': size, 'thumbnail': thumbnail, 'images': images if images else None, 'uploader': uploader, 'uploaderLink': uploaderLink, 'downloads': downloads, 'lastChecked': lastChecked, 'uploadDate': uploadDate, 'seeders': seeders, 'leechers': leechers, 'magnetLink': magnetLink, 'infoHash': infoHash.strip() if infoHash else None}
+
+    return {
+        'name': name,
+        'shortName': shortName,
+        'description': description,
+        'category': category,
+        'type': species,
+        'genre': genre,
+        'language': language,
+        'size': size,
+        'thumbnail': thumbnail,
+        'images': images if images else None,
+        'uploader': uploader,
+        'uploaderLink': uploaderLink,
+        'downloads': downloads,
+        'lastChecked': lastChecked,
+        'uploadDate': uploadDate,
+        'seeders': seeders,
+        'leechers': leechers,
+        'magnetLink': magnetLink,
+        'infoHash': infoHash.strip() if infoHash else None
+    }
