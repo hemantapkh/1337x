@@ -57,8 +57,8 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 ```python
 >>> from py1337x import py1337x
 
-# Using 1337x.tw and saving the cache in Desktop which expires after 500 seconds
->>> torrents = py1337x(proxy='1337x.tw', cache='/home/user/Desktop/cache', cacheTime=500)
+# Using 1337x.tw and saving the cache in sqlite database which expires after 500 seconds
+>>> torrents = py1337x(proxy='1337x.tw', cache='py1337xCache', cacheTime=500)
 
 >>> torrents.search('harry potter')
 {'items': [...], 'currentPage': 1, 'itemCount': 20, 'pageCount': 50}
