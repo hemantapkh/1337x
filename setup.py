@@ -5,7 +5,7 @@ with open("README.md", encoding="utf8") as fh:
 
 setuptools.setup(
     name="1337x",
-    version="1.2.3",
+    version="1.2.4",
     author="Hemanta Pokharel",
     author_email="hemantapkh@yahoo.com",
     description="Unofficial API of 1337x.to",
