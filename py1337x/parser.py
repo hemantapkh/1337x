@@ -75,7 +75,10 @@ def infoParser(response, baseUrl):
     thumbnail = thumbnail.find('img')['src'] if thumbnail else None
 
     if thumbnail and not thumbnail.startswith('http'):
-        thumbnail = f'{baseUrl}'+thumbnail
+        if thumbnail.startswith('//'):
+            thumbnail = 'https:'+thumbnail
+        else:
+            thumbnail = baseUrl+thumbnail
 
     magnetLink = soup.select('a[href^="magnet"]')
     magnetLink = magnetLink[0]['href'] if magnetLink else None
