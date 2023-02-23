@@ -14,7 +14,7 @@ setuptools.setup(
     install_requires=["requests", "bs4", "requests-cache", "torpy"],
     url="https://github.com/hemantapkh/1337x",
     project_urls={
-        "Documentation": "https://github.com/hemantapkh/1337x/blob/main/README.md",
+        "Documentation": "https://github.com/hemantapkh/1337x/blob/tor/README.md",
         "Issue tracker": "https://github.com/hemantapkh/1337x/issues",
       },
     packages=setuptools.find_packages(),

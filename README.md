@@ -19,12 +19,13 @@
 </a>
 
 <p align="center">
-This is the unofficial API of 1337x. It supports all proxies of 1337x and almost all functions of 1337x. You can search, get trending, top and popular torrents. Furthermore, you can browse torrents of a certain category. It also supports filtering on result by category, supports sorting and caching.
+This is the unofficial API of 1337x. It supports all proxies of 1337x and almost all functions of 1337x. You can search, get trending, top and popular torrents. Furthermore, you can browse torrents of a certain category. It also supports filtering on result by category, supports sorting and caching. Tor requests are now supported !
 <p align="center">
 
 ## Table of Contents
 - [Installation](#installation)
 - [Start Guide](#start-guide)
+   - [Tor Requests (NEW)](#new--tor-requests)
    - [Quick Examples](#quick-examples)    
      - [Searching Torrents](#1-searching-torrents)
      - [Getting Trending Torrents](#2-getting-trending-torrents)
@@ -39,17 +40,39 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 - [License](#license)
 
 ## Installation
-- Install via [PyPi](https://www.pypi.org/project/1337x)
-    ```bash
-    pip install 1337x
-    ```
 
 - Install from the source
     ```bash
-    git clone https://github.com/hemantapkh/1337x && cd 1337x && python setup.py sdist && pip install dist/*
+    git clone https://github.com/hemantapkh/1337x && cd 1337x && git branch tor && python setup.py sdist && pip install dist/*
     ```
 
 ## Start guide
+
+### Tor Requests (NEW)
+
+#### Example of use
+
+```python
+from py1337x import py1337x
+
+# Initialize Connection Instance
+# It's not actually saving cache of any requests when using Tor
+torrents = py1337x(use_tor=True)
+
+# Or
+torrents = py1337x(proxy='1337x.to', use_tor=True)
+
+# Make a search from any country will works but it take a long time to execute
+# Because it's making requests on each proxy via Tor until one proxy is working.
+# All the methods are required the same parameters as usual.
+search = torrents.search('harry potter')
+
+# All methods are available to use with Tor
+info = torrents.info(link='https://www.1337xx.to/torrent/258188/h9/')
+
+# Or
+info = torrents.info(torrentId='258188')
+```
 
 ### Quick Examples
 
@@ -126,7 +149,9 @@ torrents = py1337x(proxy='1337x.st', cookie='<cookie>', cache='py1337xCache', ca
 
 **Proxy**
 
-If the default domain is banned in your country, you can use an alternative domain of 1337x. 
+If the default domain is banned in your country, you can use an alternative domain of 1337x, or you can use the new [Tor Request](#tor-requests-new) system.
+
+All categories are now accessible via the `py1337x.proxies` attribute.
 
 - [`1337x.to`](https://1337x.to) (**default**)
 - [`1337x.tw`](https://www.1337x.tw)
@@ -201,6 +226,8 @@ torrents.browse(category)          | Browse browse of certain category      | se
 torrents&#46;info(link or torrentId)          | Get information of a torrent      | self,<br>link: `Link of a torrent` or<br>torrentId: `ID of a torrent`
 
 ### Available categories
+
+All categories are now accessible via the `py1337x.categories` attribute.
 
  - `'movies'`
  - `'tv'`
