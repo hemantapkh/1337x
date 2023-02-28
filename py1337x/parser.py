@@ -2,10 +2,7 @@ from bs4 import BeautifulSoup
 
 
 def torrentParser(response, baseUrl, page=1):
-    if isinstance(response, bytes):
-        soup = BeautifulSoup(response, 'html.parser')
-    else:
-        soup = BeautifulSoup(response.content, 'html.parser')
+    soup = BeautifulSoup(response.content, 'html.parser')
 
     torrentList = soup.select('a[href*="/torrent/"]')
     seedersList = soup.select('td.coll-2')
@@ -60,10 +57,7 @@ def torrentParser(response, baseUrl, page=1):
 
 
 def infoParser(response, baseUrl):
-    if isinstance(response, bytes):
-        soup = BeautifulSoup(response, 'html.parser')
-    else:
-        soup = BeautifulSoup(response.content, 'html.parser')
+    soup = BeautifulSoup(response.content, 'html.parser')
 
     name = soup.find('div', {'class': 'box-info-heading clearfix'})
     name = name.text.strip() if name else None
