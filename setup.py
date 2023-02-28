@@ -6,13 +6,13 @@ with open("README.md", encoding="utf8") as fh:
 setuptools.setup(
     name="1337x",
     version="1.0.0-tor",
-    author="Hemanta Pokharel",
-    author_email="hemantapkh@yahoo.com",
-    description="Unofficial API of 1337x.to",
+    author="LeGeRyChEeSe",
+    author_email="kilian.douarinou41@gmail.com",
+    description="Unofficial API of 1337x.to with Tor implementation",
     long_description=readme,
     long_description_content_type="text/markdown",
     install_requires=["requests", "requests[socks]", "requests[security]", "bs4", "requests-cache", "fake_useragent", "stem"],
-    url="https://github.com/hemantapkh/1337x",
+    url="https://github.com/LeGeRyChEeSe/1337x",
     project_urls={
         "Documentation": "https://github.com/hemantapkh/1337x/blob/tor/README.md",
         "Issue tracker": "https://github.com/hemantapkh/1337x/issues",
