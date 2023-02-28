@@ -11,7 +11,7 @@ setuptools.setup(
     description="Unofficial API of 1337x.to",
     long_description=readme,
     long_description_content_type="text/markdown",
-    install_requires=["requests", "bs4", "requests-cache", "torpy"],
+    install_requires=["requests", "requests[socks]", "requests[security]", "bs4", "requests-cache", "fake_useragent", "stem"],
     url="https://github.com/hemantapkh/1337x",
     project_urls={
         "Documentation": "https://github.com/hemantapkh/1337x/blob/tor/README.md",
