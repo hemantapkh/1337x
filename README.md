@@ -19,12 +19,14 @@
 </a>
 
 <p align="center">
-This is the unofficial API of 1337x. It supports all proxies of 1337x and almost all functions of 1337x. You can search, get trending, top and popular torrents. Furthermore, you can browse torrents of a certain category. It also supports filtering on result by category, supports sorting and caching.
+This is the unofficial API of 1337x. It supports all proxies of 1337x and almost all functions of 1337x. You can search, get trending, top and popular torrents. Furthermore, you can browse torrents of a certain category. It also supports filtering on result by category, supports sorting and caching. Tor requests are now integrated with no more action to do. Works great and smoothly !
 <p align="center">
 
 ## Table of Contents
 - [Installation](#installation)
 - [Start Guide](#start-guide)
+   - [Installation of Tor (NEW)  **LINUX ONLY**](#installation-of-tor-new)
+     - [Requirements](#requirements)
    - [Quick Examples](#quick-examples)    
      - [Searching Torrents](#1-searching-torrents)
      - [Getting Trending Torrents](#2-getting-trending-torrents)
@@ -39,17 +41,114 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 - [License](#license)
 
 ## Installation
-- Install via [PyPi](https://www.pypi.org/project/1337x)
-    ```bash
-    pip install 1337x
-    ```
 
 - Install from the source
     ```bash
-    git clone https://github.com/hemantapkh/1337x && cd 1337x && python setup.py sdist && pip install dist/*
+    git clone https://github.com/hemantapkh/1337x && cd 1337x && git branch tor && python setup.py sdist && pip install dist/* && sudo apt-get install tor build-essential libssl-dev libffi-dev python-dev
     ```
 
 ## Start guide
+
+### Installation of Tor (NEW) **LINUX ONLY**
+
+
+#### Requirements
+
+1. If you have installed [py1337x](https://github.com/hemantapkh/1337x) from *pip*, then type this command into a console (If you have builded [py1337x](https://github.com/hemantapkh/1337x) from the *source* then you should skip this step)
+```bash
+sudo apt-get install tor
+```
+2. Generate a password that you should store at a **safe place** and remember it
+```bash
+tor --hash-password your-password
+```
+3. **Copy** the output of the previous command, it should looks like
+```bash
+16:05B7B9E8F3D0AB3160E030928F9517EDA5348ECD1CDCE2D95F0D230016
+```
+
+4. Configure the Tor controller to permit identity renewall requests
+```bash
+sudo nano /etc/tor/torrc
+```
+5. Uncomment those three lines
+```bash
+ControlPort 9051
+CookieAuthentication 1
+HashedControlPassword
+```
+6. **Paste** the hashed password you previously copied next to **HashedControlPassword**. If there is a password already, replace it with the newer. Now it should looks like
+```bash
+ControlPort 9051
+CookieAuthentication 1
+HashedControlPassword 16:05B7B9E8F3D0AB3160E030928F9517EDA5348ECD1CDCE2D95F0D230016
+```
+7. Save and exit the file and now it's time to start **Tor** service
+```bash
+sudo service tor start
+```
+8. If you did all well then you can run the following command from a terminal to check if it works
+```bash
+curl --socks5 localhost:9050 --socks5-hostname localhost:9050 -s https://check.torproject.org/ | cat | grep -m 1 Congratulations | xargs
+```
+- This command will display
+```bash
+Congratulations. This browser is configured to use Tor.
+```
+
+### Knowns Issues
+
+
+#### You can't perform any Search
+
+- The reason is probably because your Tor IP has been detected has SPAM so the solution is to reset a new Tor IP
+```python
+>>> from py1337x import py1337x
+
+# Trying with 11337x.st proxy but we don't get any info of the torrent
+>>> torrents = py1337x('1337x.to')
+>>> torrents.search('harry potter')
+None # Or possibly some errors
+
+# Try to do the following
+>>> torrents.getNewIp(passwd)
+# passwd parameter is the clear password you've set in the Installation of Tor at the beginning of this guide.
+# CLEAR password, not Hashed one.
+
+# Then it should fix the issue temporarly until you need to renew the Tor IP again
+# Of course you can do a for loop with many checks before you renew the IP
+>>> torrents.search('harry potter')
+{'items': [...], 'currentPage': 1, 'itemCount': 20, 'pageCount': 50}
+```
+
+#### You can't get Info of a torrent
+
+- You should call this method once if you're getting no torrents for a while
+```python
+torrents.setNewProxy(other_proxy)
+```
+- If you don't want to do it manually so you can do a for loop in the new attribute `torrents.proxies` which is a list
+```python
+>>> from py1337x import py1337x
+
+# Trying with 11337x.st proxy but we don't get any info of the torrent
+>>> torrents = py1337x('11337x.st')
+>>> torrents.info(torrentId=258188)
+{'items': [], 'currentPage': 0, 'itemCount': 0, 'pageCount': 0}
+
+# We can do a for loop to try every proxy until one returns the infos of the torrent.
+# Useful when you don't remember which proxy you've used for searching or getting a torrent.
+>>> for proxy in torrents.proxies:
+>>>   torrents.setNewProxy(proxy)
+>>>   torrents.info(torrentId=258188)
+# Possible Output
+{'items': [], 'currentPage': 0, 'itemCount': 0, 'pageCount': 0}
+{'items': [], 'currentPage': 0, 'itemCount': 0, 'pageCount': 0}
+.
+.
+.
+{'items': [...], 'currentPage': 1, 'itemCount': 20, 'pageCount': 50} # So we've finally got our torrent data
+```
 
 ### Quick Examples
 
@@ -126,7 +225,9 @@ torrents = py1337x(proxy='1337x.st', cookie='<cookie>', cache='py1337xCache', ca
 
 **Proxy**
 
-If the default domain is banned in your country, you can use an alternative domain of 1337x. 
+If the default domain is banned in your country, you can use an alternative domain of 1337x, or you can use the new [Tor Request](#tor-requests-new) system.
+
+All categories are now accessible via the `torrents.proxies` attribute.
 
 - [`1337x.to`](https://1337x.to) (**default**)
 - [`1337x.tw`](https://www.1337x.tw)
@@ -199,8 +300,12 @@ torrents.top()          | Get top torrents      | self,<br>category (optional): 
 torrents.popular(category)          | Get popular torrents      | self,<br>category: [category](#available-categories),<br>week (Defaults to False): `True for weekely, False for daily`
 torrents.browse(category)          | Browse browse of certain category      | self,<br>category: [category](#available-categories),<br>page (Defaults to 1): `Page to view`
 torrents&#46;info(link or torrentId)          | Get information of a torrent      | self,<br>link: `Link of a torrent` or<br>torrentId: `ID of a torrent`
+torrents.setNewProxy(proxy)      |  Set a new proxy for the instance    |  self,<br>proxy: `Proxy string of type '1337x.to'`
+torrents.getNewIp(passwd)      |  Set a new IP for Tor requests    |  self,<br>passwd: `Clear Password set in` [Requirements (2./3.)](#requirements)
 
 ### Available categories
+
+All categories are now accessible via the `torrents.categories` attribute.
 
  - `'movies'`
  - `'tv'`

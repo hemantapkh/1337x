@@ -3,3 +3,5 @@ env/
 py1337x/__pycache__/
 dist/
 1337x.egg-info/
+.python-version
+build/
