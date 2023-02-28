@@ -1,25 +1,19 @@
 
-<h2 align='center'>✖️Unofficial Python API Wrapper of 1337x</h2>
+<h2 align='center'>✖️Unofficial Python Custom API Wrapper of 1337x</h2>
 <p align="center">
-<img src="https://github.com/hemantapkh/1337x/blob/main/images/1337x.png?raw=true" align="center" height=205 alt="1337x" />
+<img src="https://github.com/LeGeRyChEeSe/1337x/blob/main/images/1337x.png?raw=true" align="center" height=205 alt="1337x" />
 </p>
 <p align="center">
-<a href="https://pypi.org/project/1337x">
-<img src='https://img.shields.io/pypi/v/1337x.svg'>
+<img src='https://visitor-badge.laobi.icu/badge?page_id=LeGeRyChEeSe.1337x'>
+<a href="https://github.com/LeGeRyChEeSe/1337x/stargazers">
+<img src="https://img.shields.io/github/stars/LeGeRyChEeSe/1337x" alt="Stars"/>
 </a>
-<a href="https://pepy.tech/project/1337x">
-<img src='https://pepy.tech/badge/1337x'>
-</a>
-<img src='https://visitor-badge.laobi.icu/badge?page_id=hemantapkh.1337x'>
-<a href="https://github.com/hemantapkh/1337x/stargazers">
-<img src="https://img.shields.io/github/stars/hemantapkh/1337x" alt="Stars"/>
-</a>
-<a href="https://github.com/hemantapkh/1337x/issues">
-<img src="https://img.shields.io/github/issues/hemantapkh/1337x" alt="Issues"/>
+<a href="https://github.com/LeGeRyChEeSe/1337x/issues">
+<img src="https://img.shields.io/github/issues/LeGeRyChEeSe/1337x" alt="Issues"/>
 </a>
 
 <p align="center">
-This is the unofficial API of 1337x. It supports all proxies of 1337x and almost all functions of 1337x. You can search, get trending, top and popular torrents. Furthermore, you can browse torrents of a certain category. It also supports filtering on result by category, supports sorting and caching. Tor requests are now integrated with no more action to do. Works great and smoothly !
+This is the unofficial custom API of 1337x. It supports all proxies of 1337x and almost all functions of 1337x. You can search, get trending, top and popular torrents. Furthermore, you can browse torrents of a certain category. It also supports filtering on result by category, supports sorting and caching. Tor requests are now integrated with no more action to do. Works great and smoothly !
 <p align="center">
 
 ## Table of Contents
@@ -44,50 +38,45 @@ This is the unofficial API of 1337x. It supports all proxies of 1337x and almost
 
 - Install from the source
     ```bash
-    git clone https://github.com/hemantapkh/1337x && cd 1337x && git branch tor && python setup.py sdist && pip install dist/* && sudo apt-get install tor build-essential libssl-dev libffi-dev python-dev
+    git clone https://github.com/LeGeRyChEeSe/1337x.git && cd 1337x && python setup.py sdist && pip install dist/* && sudo apt-get install tor build-essential libssl-dev libffi-dev python-dev
     ```
 
 ## Start guide
 
 ### Installation of Tor (NEW) **LINUX ONLY**
 
-
 #### Requirements
 
-1. If you have installed [py1337x](https://github.com/hemantapkh/1337x) from *pip*, then type this command into a console (If you have builded [py1337x](https://github.com/hemantapkh/1337x) from the *source* then you should skip this step)
-```bash
-sudo apt-get install tor
-```
-2. Generate a password that you should store at a **safe place** and remember it
+1. Generate a password that you should store at a **safe place** and remember it
 ```bash
 tor --hash-password your-password
 ```
-3. **Copy** the output of the previous command, it should looks like
+2. **Copy** the output of the previous command, it should looks like
 ```bash
 16:05B7B9E8F3D0AB3160E030928F9517EDA5348ECD1CDCE2D95F0D230016
 ```
 
-4. Configure the Tor controller to permit identity renewall requests
+3. Configure the Tor controller to permit identity renewall requests
 ```bash
 sudo nano /etc/tor/torrc
 ```
-5. Uncomment those three lines
+4. Uncomment those three lines
 ```bash
 ControlPort 9051
 CookieAuthentication 1
 HashedControlPassword
 ```
-6. **Paste** the hashed password you previously copied next to **HashedControlPassword**. If there is a password already, replace it with the newer. Now it should looks like
+5. **Paste** the hashed password you previously copied next to **HashedControlPassword**. If there is a password already, replace it with the newer. Now it should looks like
 ```bash
 ControlPort 9051
 CookieAuthentication 1
 HashedControlPassword 16:05B7B9E8F3D0AB3160E030928F9517EDA5348ECD1CDCE2D95F0D230016
 ```
-7. Save and exit the file and now it's time to start **Tor** service
+6. Save and exit the file and now it's time to start **Tor** service
 ```bash
 sudo service tor start
 ```
-8. If you did all well then you can run the following command from a terminal to check if it works
+7. If you did all well then you can run the following command from a terminal to check if it works
 ```bash
 curl --socks5 localhost:9050 --socks5-hostname localhost:9050 -s https://check.torproject.org/ | cat | grep -m 1 Congratulations | xargs
 ```

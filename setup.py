@@ -14,8 +14,8 @@ setuptools.setup(
     install_requires=["requests", "requests[socks]", "requests[security]", "bs4", "requests-cache", "fake_useragent", "stem"],
     url="https://github.com/LeGeRyChEeSe/1337x",
     project_urls={
-        "Documentation": "https://github.com/hemantapkh/1337x/blob/tor/README.md",
-        "Issue tracker": "https://github.com/hemantapkh/1337x/issues",
+        "Documentation": "https://github.com/LeGeRyChEeSe/1337x/blob/main/README.md",
+        "Issue tracker": "https://github.com/LeGeRyChEeSe/1337x/pulls",
       },
     packages=setuptools.find_packages(),
     classifiers=[
