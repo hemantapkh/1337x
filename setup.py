@@ -5,7 +5,7 @@ with open("README.md", encoding="utf8") as fh:
 
 setuptools.setup(
     name="1337x",
-    version="1.0.0-tor",
+    version="1.0.0.tor",
     author="LeGeRyChEeSe",
     author_email="kilian.douarinou41@gmail.com",
     description="Unofficial API of 1337x.to with Tor implementation",
