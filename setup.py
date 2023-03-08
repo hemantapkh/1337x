@@ -5,17 +5,17 @@ with open("README.md", encoding="utf8") as fh:
 
 setuptools.setup(
     name="1337x",
-    version="1.2.4",
-    author="Hemanta Pokharel",
-    author_email="hemantapkh@yahoo.com",
-    description="Unofficial API of 1337x.to",
+    version="1.0.0",
+    author="LeGeRyChEeSe",
+    author_email="kilian.douarinou41@gmail.com",
+    description="Unofficial API of 1337x.to with Tor implementation",
     long_description=readme,
     long_description_content_type="text/markdown",
-    install_requires=["requests", "bs4", "requests-cache"],
-    url="https://github.com/hemantapkh/1337x",
+    install_requires=["requests", "requests[socks]", "requests[security]", "bs4", "requests-cache", "fake_useragent", "stem"],
+    url="https://github.com/LeGeRyChEeSe/1337x",
     project_urls={
-        "Documentation": "https://github.com/hemantapkh/1337x/blob/main/README.md",
-        "Issue tracker": "https://github.com/hemantapkh/1337x/issues",
+        "Documentation": "https://github.com/LeGeRyChEeSe/1337x/blob/main/README.md",
+        "Issue tracker": "https://github.com/LeGeRyChEeSe/1337x/pulls",
       },
     packages=setuptools.find_packages(),
     classifiers=[
