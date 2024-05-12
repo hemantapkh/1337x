@@ -1,17 +1,20 @@
 import setuptools
 
-with open("README.md", encoding="utf8") as fh:
-    readme = fh.read()
+with open("README.md", encoding="utf8") as f:
+    readme = f.read()
+    
+with open("requirements.txt") as f:
+    requirements = f.read().splitlines()
 
 setuptools.setup(
     name="1337x",
-    version="1.2.4",
+    version="1.2.5",
     author="Hemanta Pokharel",
     author_email="hemantapkh@yahoo.com",
     description="Unofficial API of 1337x.to",
     long_description=readme,
     long_description_content_type="text/markdown",
-    install_requires=["requests", "bs4", "requests-cache"],
+    install_requires=requirements,
     url="https://github.com/hemantapkh/1337x",
     project_urls={
         "Documentation": "https://github.com/hemantapkh/1337x/blob/main/README.md",
