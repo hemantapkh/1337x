@@ -129,15 +129,13 @@ torrents = py1337x(proxy='1337x.st', cookie='<cookie>', cache='py1337xCache', ca
 If the default domain is banned in your country, you can use an alternative domain of 1337x. 
 
 - [`1337x.to`](https://1337x.to) (**default**)
-- [`1337x.tw`](https://www.1337x.tw)
-- [`1377x.to`](https://www.1377x.to)
-- [`1337xx.to`](https://www.1337xx.to)
 - [`1337x.st`](https://1337x.st)
 - [`x1337x.ws`](https://x1337x.ws)
 - [`x1337x.eu`](https://x1337x.eu)
 - [`x1337x.se`](https://x1337x.se)
-- [`1337x.is`](https://1337x.is)
-- [`1337x.gd`](https://1337x.gd)
+- [`1337x.so`](https://1337x.so)
+- [`1377x.to`](https://www.1377x.to) (unofficial)
+- [`1337xx.to`](https://www.1337xx.to) (unofficial)
 
 **cookie**
 
