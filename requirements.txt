@@ -14,4 +14,4 @@ requests-toolbelt==1.0.0
 six==1.16.0
 soupsieve==2.5
 url-normalize==1.4.3
-urllib3==2.2.1
+urllib3==2.2.2
