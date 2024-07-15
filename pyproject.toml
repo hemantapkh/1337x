@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "1337x"
-version = "1.25.6"
+version = "1.2.6"
 description = "Unofficial API of 1337x.to"
 authors = ["Hemanta Pokharel <hemantapkh@yahoo.com>"]
 license = "MIT"
