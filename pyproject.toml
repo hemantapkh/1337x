@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "1337x"
+version = "1.2.6"
+description = "Unofficial API of 1337x.to"
+authors = ["Hemanta Pokharel <hemantapkh@yahoo.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/hemantapkh/1337x"
+documentation = "https://github.com/hemantapkh/1337x/blob/main/README.md"
+urls = { "Issue tracker" = "https://github.com/hemantapkh/1337x/issues" }
+keywords = ["1337x", "torrents"]
+packages = [
+    { include = "py1337x" }
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities"
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.32.3"
+beautifulsoup4 = "^4.12.3"
+requests-cache = "^1.2.1"
+cloudscraper = "^1.2.71"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
