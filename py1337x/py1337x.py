@@ -2,8 +2,6 @@ from typing import Optional, Dict, Literal
 
 import cloudscraper
 
-import requests
-
 from py1337x import config, parser, utils, models
 
 class Py1337x:
@@ -21,8 +19,7 @@ class Py1337x:
     def __init__(
         self, 
         base_url: str = config.default_base_url, 
-        headers: Dict[str, str] = {}, 
-        requests: requests = cloudscraper.create_scraper()
+        cloudscraper_kwargs: Dict ={},
         ):
         """
         Initialize the Py1337x class with base URL, headers, and requests session.
@@ -30,11 +27,10 @@ class Py1337x:
         Args:
             base_url (Optional[str]): The base URL for the API.
             headers (Optional[dict]): The request headers.
-            requests (Optional[session]): The requests session.
+            cloudscraper_kwargs (Optional[dict]): Kwargs to pass in cloudscraper.
         """
         self.base_url = base_url
-        self.headers = {**config.default_headers, ** headers}
-        self.requests = requests
+        self.requests = cloudscraper.create_scraper(**cloudscraper_kwargs)
         self.url_builder = utils.URLBuilder(base_url)
 
     def search(
@@ -62,7 +58,7 @@ class Py1337x:
         category = self.url_builder.sanitize_category(category)
         url = self.url_builder.build_search_url(query, page, category, sort_by, order)
 
-        response = self.requests.get(url, headers=self.headers)
+        response = self.requests.get(url)
 
         return parser.torrent_parser(response, base_url=self.base_url, page=page)
 
@@ -82,7 +78,7 @@ class Py1337x:
             models.TorrentSearchResult: Trending torrents
         """
         url = self.url_builder.build_trending_url(category, week)
-        response = self.requests.get(url, headers=self.headers)
+        response = self.requests.get(url)
 
         return parser.torrent_parser(response, base_url=self.base_url)
 
@@ -100,7 +96,7 @@ class Py1337x:
             models.TorrentSearchResult: Top 100 torrents
         """
         url = self.url_builder.build_top_url(category)
-        response = self.requests.get(url, headers=self.headers)
+        response = self.requests.get(url)
 
         return parser.torrent_parser(response, base_url=self.base_url)
 
@@ -120,7 +116,7 @@ class Py1337x:
             models.TorrentSearchResult: Popular torrents
         """
         url = self.url_builder.build_popular_url(category, weekly)
-        response = self.requests.get(url, headers=self.headers)
+        response = self.requests.get(url)
 
         return parser.torrent_parser(response, base_url=self.base_url)
 
@@ -140,7 +136,7 @@ class Py1337x:
             models.TorrentSearchResult: Parsed browse results.
         """
         url = self.url_builder.build_browse_url(category, page)
-        response = self.requests.get(url, headers=self.headers)
+        response = self.requests.get(url)
 
         return parser.torrent_parser(response, base_url=self.base_url, page=page)
 
@@ -163,6 +159,6 @@ class Py1337x:
             TypeError: If neither link nor torrent_id is provided, or if both are provided.
         """
         url = self.url_builder.build_info_url(link, torrent_id)
-        response = self.requests.get(url, headers=self.headers)
+        response = self.requests.get(url)
 
         return parser.info_parser(response, base_url=self.base_url)
