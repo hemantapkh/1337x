@@ -25,7 +25,6 @@ classifiers = [
 python = "^3.8"
 requests = "^2.32.3"
 beautifulsoup4 = "^4.12.3"
-requests-cache = "^1.2.1"
 cloudscraper = "^1.2.71"
 
 

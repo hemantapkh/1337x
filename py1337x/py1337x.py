@@ -1,68 +1,168 @@
+from typing import Optional, Dict, Literal
+
 import cloudscraper
-import requests_cache
 
-from py1337x import parser
+import requests
 
+from py1337x import config, parser, utils, models
 
-class py1337x():
-    def __init__(self, proxy=None, cookie=None, cache=None, cacheTime=86400, backend='sqlite'):
-        self.baseUrl = f'https://www.{proxy}' if proxy else 'https://www.1337x.to'
-        self.headers = {
-            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.37',
-        } if cache else {}
+class Py1337x:
+    """
+    A class to interact with the py1337x API for searching and retrieving torrent information.
+    
+    from py1337x import Py1337x
+    
+    torrents = Py1337x()
+    
+    vlc_media = torrents.search('vlc media player')
+    print(vlc_media)
+    """
 
-        if cookie:
-            self.headers['cookie'] = f'cf_clearance={cookie}'
+    def __init__(
+        self, 
+        base_url: str = config.default_base_url, 
+        headers: Dict[str, str] = {}, 
+        requests: requests = cloudscraper.create_scraper()
+        ):
+        """
+        Initialize the Py1337x class with base URL, headers, and requests session.
 
-        self.requests = requests_cache.CachedSession(cache, expire_after=cacheTime, backend=backend) if cache else cloudscraper.create_scraper()
+        Args:
+            base_url (Optional[str]): The base URL for the API.
+            headers (Optional[dict]): The request headers.
+            requests (Optional[session]): The requests session.
+        """
+        self.base_url = base_url
+        self.headers = {**config.default_headers, ** headers}
+        self.requests = requests
+        self.url_builder = utils.URLBuilder(base_url)
 
-    #: Searching torrents
-    def search(self, query, page=1, category=None, sortBy=None, order='desc'):
-        query = '+'.join(query.split())
-        category = category.upper() if category and category.lower() in ['xxx', 'tv'] else category.capitalize() if category else None
-        url = f"{self.baseUrl}/{'sort-' if sortBy else ''}{'category-' if category else ''}search/{query}/{category+'/' if category else ''}{sortBy.lower()+'/' if sortBy else ''}{order.lower()+'/' if sortBy else ''}{page}/"
+    def search(
+        self,
+        query: str, 
+        page: int = 1, 
+        category: Optional[str] = None, 
+        sort_by: Optional[Literal["time", "size", "seeders", "leechers"]] = None, 
+        order: Literal["asc", "desc"] = "desc"
+    ) -> models.TorrentSearchResult:
+        """
+        Search for torrents based on a query.
+
+        Args:
+            query (str): The search query.
+            page (int): The page number.
+            category (Optional[str]): Category of the torrent.
+            sort_by (Optional[str]): Sort by "time", "size", "seeders" or "leechers".
+            order (str): The order string ('asc' or 'desc').
+
+        Returns:
+            models.TorrentSearchResult: Result from the query
+        """
+        query = self.url_builder.sanitize_query(query)
+        category = self.url_builder.sanitize_category(category)
+        url = self.url_builder.build_search_url(query, page, category, sort_by, order)
 
         response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl, page=page)
 
-    #: Trending torrents
-    def trending(self, category=None, week=False):
-        url = f"{self.baseUrl}/trending{'-week' if week and not category else ''}{'/w/'+category.lower()+'/' if week and category else '/d/'+category.lower()+'/' if not week and category else ''}"
+        return parser.torrent_parser(response, base_url=self.base_url, page=page)
 
+    def trending(
+        self, 
+        category: Optional[str] = None, 
+        week: bool = False
+    ) -> models.TorrentSearchResult:
+        """
+        Retrieve trending torrents.
+
+        Args:
+            category (Optional[str]): Category of the torrent.
+            week (bool): Whether to get weekly trending torrents.
+
+        Returns:
+            models.TorrentSearchResult: Trending torrents
+        """
+        url = self.url_builder.build_trending_url(category, week)
         response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl)
 
-    #: Top 100 torrents
-    def top(self, category=None):
-        category = 'applications' if category and category.lower() == 'apps' else 'television' if category and category.lower() == 'tv' else category.lower() if category else None
-        url = f"{self.baseUrl}/top-100{'-'+category if category else ''}"
+        return parser.torrent_parser(response, base_url=self.base_url)
 
+    def top(
+        self, 
+        category: Optional[str] = None
+    ) -> models.TorrentSearchResult:
+        """
+        Retrieve top 100 torrents.
+
+        Args:
+            category (Optional[str]): Category of the torrent.
+
+        Returns:
+            models.TorrentSearchResult: Top 100 torrents
+        """
+        url = self.url_builder.build_top_url(category)
         response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl)
 
-    #: Popular torrents
-    def popular(self, category, week=False):
-        url = f"{self.baseUrl}/popular-{category.lower()}{'-week' if week else ''}"
+        return parser.torrent_parser(response, base_url=self.base_url)
 
+    def popular(
+        self, 
+        category: str, 
+        weekly: bool = False
+    ) -> models.TorrentSearchResult:
+        """
+        Retrieve popular torrents.
+
+        Args:
+            category (str): Category of the torrent.
+            weekly (bool): Whether to get weekly popular torrents.
+
+        Returns:
+            models.TorrentSearchResult: Popular torrents
+        """
+        url = self.url_builder.build_popular_url(category, weekly)
         response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl)
 
-    #: Browse torrents by category type
-    def browse(self, category, page=1):
-        category = category.upper() if category.lower() in ['xxx', 'tv'] else category.capitalize()
-        url = f'{self.baseUrl}/cat/{category}/{page}/'
+        return parser.torrent_parser(response, base_url=self.base_url)
 
+    def browse(
+        self, 
+        category: str, 
+        page: int = 1
+    ) -> models.TorrentSearchResult:
+        """
+        Browse torrents by category.
+
+        Args:
+            category (str): Category of the torrent.
+            page (int): The page number.
+
+        Returns:
+            models.TorrentSearchResult: Parsed browse results.
+        """
+        url = self.url_builder.build_browse_url(category, page)
         response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl, page=page)
 
-    #: Info of torrent
-    def info(self, link=None, torrentId=None):
-        if not link and not torrentId:
-            raise TypeError('Missing 1 required positional argument: link or torrentId')
-        elif link and torrentId:
-            raise TypeError('Got an unexpected argument: Pass either link or torrentId')
+        return parser.torrent_parser(response, base_url=self.base_url, page=page)
 
-        link = f'{self.baseUrl}/torrent/{torrentId}/h9/' if torrentId else link
-        response = self.requests.get(link, headers=self.headers)
+    def info(
+        self, 
+        link: Optional[str] = None, 
+        torrent_id: Optional[str] = None
+    ) -> models.TorrentInfo:
+        """
+        Retrieve information of a torrent.
 
-        return parser.infoParser(response, baseUrl=self.baseUrl)
+        Args:
+            link (Optional[str]): The URL to the torrent.
+            torrent_id (Optional[str]): The torrent ID.
+
+        Returns:
+            models.TorrentInfo: Parsed torrent information.
+
+        Raises:
+            TypeError: If neither link nor torrent_id is provided, or if both are provided.
+        """
+        url = self.url_builder.build_info_url(link, torrent_id)
+        response = self.requests.get(url, headers=self.headers)
+
+        return parser.info_parser(response, base_url=self.base_url)
