@@ -1,6 +1,7 @@
 from typing import Optional, Dict, Literal
 
 import cloudscraper
+from asyncer import asyncify
 
 from py1337x import config, parser, utils, models
 
@@ -162,3 +163,38 @@ class Py1337x:
         response = self.requests.get(url)
 
         return parser.info_parser(response, base_url=self.base_url)
+
+
+class AsyncPy1337x(Py1337x):
+    """
+    An experimental asynchronous version of the Py1337x class to interact with the py1337x
+    asynchronously by calling the original methods in a worker thread.
+
+    Usage:
+    
+    ```python
+    import asyncio
+    
+    from py1337x import AsyncPy1337x
+    
+    async def main():
+        torrents = AsyncPy1337x()
+        vlc_media = await torrents.search('vlc media player')
+        print(vlc_media)
+    
+    asyncio.run(main())
+    ```
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __getattribute__(self, name):
+        # Get the attribute from the parent class
+        attr = super().__getattribute__(name)
+        
+        if callable(attr):
+            # If the attribute is callable, return an asyncified version of it
+            return asyncify(attr)
+        
+        # Otherwise, return the attribute as is
+        return attr

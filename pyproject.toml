@@ -26,6 +26,7 @@ python = "^3.8"
 requests = "^2.32.3"
 beautifulsoup4 = "^4.12.3"
 cloudscraper = "^1.2.71"
+asyncer = "0.0.8"
 
 
 [build-system]
