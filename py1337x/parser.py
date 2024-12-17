@@ -3,7 +3,7 @@ from requests import Response
 
 from py1337x import models
 
-def torrent_parser(response: Response, base_url: str, page: int = 1) -> models.TorrentSearchResult:
+def torrent_parser(response: Response, base_url: str, page: int = 1) -> models.TorrentResult:
     """
     Parse the response from a torrent result page.
 
@@ -13,7 +13,7 @@ def torrent_parser(response: Response, base_url: str, page: int = 1) -> models.T
         page (int): The current page number.
 
     Returns:
-        TorrentSearchResult: The parsed search results.
+        The parsed search results.
     """
     soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -60,7 +60,7 @@ def torrent_parser(response: Response, base_url: str, page: int = 1) -> models.T
                 uploader_link=uploader_link
             ))
 
-    return models.TorrentSearchResult(
+    return models.TorrentResult(
         items=items,
         current_page=page or 1,
         item_count=len(torrent_list),
@@ -76,7 +76,7 @@ def info_parser(response: Response, base_url: str) -> models.TorrentInfo:
         base_url (str): The base URL for the API.
 
     Returns:
-        TorrentInfo: The parsed torrent information.
+        The parsed torrent information.
     """
     soup = BeautifulSoup(response.content, 'html.parser')
 

@@ -9,12 +9,15 @@ class Py1337x:
     """
     A class to interact with the py1337x API for searching and retrieving torrent information.
     
-    from py1337x import Py1337x
-    
-    torrents = Py1337x()
-    
-    vlc_media = torrents.search('vlc media player')
-    print(vlc_media)
+    Example:
+        ```python
+        from py1337x import Py1337x
+        
+        torrents = Py1337x()
+        
+        vlc_media = torrents.search('vlc media player')
+        print(vlc_media)
+        ```
     """
 
     def __init__(
@@ -27,8 +30,12 @@ class Py1337x:
 
         Args:
             base_url (Optional[str]): The base URL for the API.
-            headers (Optional[dict]): The request headers.
             cloudscraper_kwargs (Optional[dict]): Kwargs to pass in cloudscraper.
+            
+        Example:
+            ```python
+            torrents = Py1337x()
+            ```
         """
         self.base_url = base_url
         self.requests = cloudscraper.create_scraper(**cloudscraper_kwargs)
@@ -41,7 +48,7 @@ class Py1337x:
         category: Optional[str] = None, 
         sort_by: Optional[Literal["time", "size", "seeders", "leechers"]] = None, 
         order: Literal["asc", "desc"] = "desc"
-    ) -> models.TorrentSearchResult:
+    ) -> models.TorrentResult:
         """
         Search for torrents based on a query.
 
@@ -53,7 +60,7 @@ class Py1337x:
             order (str): The order string ('asc' or 'desc').
 
         Returns:
-            models.TorrentSearchResult: Result from the query
+            Result from the query
         """
         query = self.url_builder.sanitize_query(query)
         category = self.url_builder.sanitize_category(category)
@@ -67,7 +74,7 @@ class Py1337x:
         self, 
         category: Optional[str] = None, 
         week: bool = False
-    ) -> models.TorrentSearchResult:
+    ) -> models.TorrentResult:
         """
         Retrieve trending torrents.
 
@@ -76,7 +83,7 @@ class Py1337x:
             week (bool): Whether to get weekly trending torrents.
 
         Returns:
-            models.TorrentSearchResult: Trending torrents
+            Trending torrents
         """
         url = self.url_builder.build_trending_url(category, week)
         response = self.requests.get(url)
@@ -86,7 +93,7 @@ class Py1337x:
     def top(
         self, 
         category: Optional[str] = None
-    ) -> models.TorrentSearchResult:
+    ) -> models.TorrentResult:
         """
         Retrieve top 100 torrents.
 
@@ -94,7 +101,7 @@ class Py1337x:
             category (Optional[str]): Category of the torrent.
 
         Returns:
-            models.TorrentSearchResult: Top 100 torrents
+            Top 100 torrents
         """
         url = self.url_builder.build_top_url(category)
         response = self.requests.get(url)
@@ -105,7 +112,7 @@ class Py1337x:
         self, 
         category: str, 
         weekly: bool = False
-    ) -> models.TorrentSearchResult:
+    ) -> models.TorrentResult:
         """
         Retrieve popular torrents.
 
@@ -114,7 +121,7 @@ class Py1337x:
             weekly (bool): Whether to get weekly popular torrents.
 
         Returns:
-            models.TorrentSearchResult: Popular torrents
+            Popular torrents
         """
         url = self.url_builder.build_popular_url(category, weekly)
         response = self.requests.get(url)
@@ -125,7 +132,7 @@ class Py1337x:
         self, 
         category: str, 
         page: int = 1
-    ) -> models.TorrentSearchResult:
+    ) -> models.TorrentResult:
         """
         Browse torrents by category.
 
@@ -134,7 +141,7 @@ class Py1337x:
             page (int): The page number.
 
         Returns:
-            models.TorrentSearchResult: Parsed browse results.
+            Parsed browse results.
         """
         url = self.url_builder.build_browse_url(category, page)
         response = self.requests.get(url)
@@ -154,7 +161,7 @@ class Py1337x:
             torrent_id (Optional[str]): The torrent ID.
 
         Returns:
-            models.TorrentInfo: Parsed torrent information.
+            Parsed torrent information.
 
         Raises:
             TypeError: If neither link nor torrent_id is provided, or if both are provided.

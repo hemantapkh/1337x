@@ -18,7 +18,7 @@ class TorrentItem:
         return asdict(self)
 
 @dataclass
-class TorrentSearchResult:
+class TorrentResult:
     """Represents the result of a torrent search."""
     items: List[TorrentItem]
     current_page: int
