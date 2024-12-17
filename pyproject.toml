@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "1337x"
-version = "1.2.6"
+version = "2.0.0rc1"
 description = "Unofficial API of 1337x.to"
-authors = ["Hemanta Pokharel <hemantapkh@yahoo.com>"]
+authors = ["Hemanta Pokharel <yo@hemantapkh.com>"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/hemantapkh/1337x"
@@ -13,7 +13,7 @@ packages = [
     { include = "py1337x" }
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
