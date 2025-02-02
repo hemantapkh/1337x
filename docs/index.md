@@ -1,40 +1,40 @@
+<p align="center">
+  <img src="https://github.com/hemantapkh/1337x/blob/main/images/1337x.png?raw=true" width="300" alt="1337x" />
+</p>
+<p align="center">
+  <a href="https://pypi.org/project/1337x">
+    <img src='https://img.shields.io/pypi/v/1337x.svg' alt="Pypi Version" />
+  </a>
+  <a href="https://pepy.tech/project/1337x">
+    <img src='https://pepy.tech/badge/1337x' alt="Downloads" />
+  </a>
+  <a href='https://pypi.org/project/1337x'>
+    <img src='https://visitor-badge.laobi.icu/badge?page_id=hemantapkh.1337x' alt="Visitors" />
+  </a>
+  <a href="https://github.com/hemantapkh/1337x/stargazers">
+    <img src="https://img.shields.io/github/stars/hemantapkh/1337x" alt="Stars" />
+  </a>
+  <a href="https://github.com/hemantapkh/1337x/issues">
+    <img src="https://img.shields.io/github/issues/hemantapkh/1337x" alt="Issues" />
+  </a>
+</p>
+
+
 ## Installation
 
-Install 1337x with pip
+Install with pip
 
 ```console
 pip install 1337x
 ```
 
-## Example
+Install from source
 
-### Non Async Py1337x
-
-```python
-from py1337x import Py1337x
-
-torrents = Py1337x()
-results = torrents.search("Arch Linux")
-
-for item in results.items:
-    print(item.name)
+```console
+pip install git+https://github.com/hemantapkh/1337x
 ```
 
-### Async Py1337x
-
-```python
-import asyncio
-
-from py1337x import AsyncPy1337x
-
-async def main():
-    torrents = AsyncPy1337x()
-    vlc_media = await torrents.search('Arch Linux')
-    print(vlc_media)
-
-asyncio.run(main())
-```
-
-## Detailed Documentation
+## Detailled Documentation
 
 ### ::: py1337x.Py1337x
+### ::: py1337x.AsyncPy1337x

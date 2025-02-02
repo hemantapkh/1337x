@@ -53,7 +53,12 @@ theme:
   - toc.follow
 
 plugins:
-  - search
-  - mkdocstrings
-  
-
+- search
+- mkdocstrings:
+    handlers:
+      python:
+        options:
+          members_order: source
+          merge_init_into_class: true
+          docstring_options:
+            ignore_init_summary: true
