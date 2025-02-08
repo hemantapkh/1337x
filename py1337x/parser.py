@@ -51,7 +51,7 @@ def torrent_parser(response: Response, base_url: str, page: int = 1) -> models.T
             items.append(models.TorrentItem(
                 name=name,
                 torrent_id=torrent_id,
-                link=link,
+                url=link,
                 seeders=seeders,
                 leechers=leechers,
                 size=size,

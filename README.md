@@ -1,5 +1,3 @@
-
-<h2 align='center'>✖️Unofficial Python API Wrapper of 1337x</h2>
 <p align="center">
 <img src="https://github.com/hemantapkh/1337x/blob/main/images/1337x.png?raw=true" align="center" height=205 alt="1337x" />
 </p>
@@ -19,94 +17,81 @@
 </a>
 
 <p align="center">
-This is the unofficial API of 1337x. It supports all proxies of 1337x and almost all functions of 1337x. You can search, get trending, top and popular torrents. Furthermore, you can browse torrents of a certain category. It also supports filtering on result by category, supports sorting and caching.
+The ultimate Python API wrapper for 1337x.
+
 <p align="center">
 
 ## Table of Contents
 - [Installation](#installation)
-- [Start Guide](#start-guide)
-   - [Quick Examples](#quick-examples)    
-     - [Searching Torrents](#1-searching-torrents)
-     - [Getting Trending Torrents](#2-getting-trending-torrents)
-     - [Getting information of a torrent](#3-getting-information-of-a-torrent)
+- [Getting Started](#getting-started)
+   - [Examples](#examples)
+   - [Asynchronous Usage](#asynchronous-usage)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Installation
-- Install via [PyPi](https://www.pypi.org/project/1337x)
-    ```bash
-    pip install 1337x
-    ```
-
-- Install from the source
-    ```bash
-    pip install git+https://github.com/hemantapkh/1337x
-    ```
-
-## Start guide
-
-### Quick Examples
-
-#### 1. Searching torrents
-```python
->>> from py1337x import py1337x
-
-# Using 1337x.tw and saving the cache in sqlite database which expires after 500 seconds
->>> torrents = py1337x(proxy='1337x.to', cache='py1337xCache', cacheTime=500)
-
->>> torrents.search('harry potter')
-{'items': [...], 'currentPage': 1, 'itemCount': 20, 'pageCount': 50}
-
-# Searching harry potter in category movies and sort by seeders in descending order
->>> torrents.search('harry potter', category='movies', sortBy='seeders', order='desc') 
-{'items': [...], 'currentPage': 1, 'itemCount': 40, 'pageCount': 50}
-
-# Viewing the 5th page of the result
->>> torrents.search('harry potter', page=5) 
-{'items': [...], 'currentPage': , 'itemCount': 20, 'pageCount': 50}
+Install via [PyPi](https://www.pypi.org/project/1337x):
+```bash
+pip install 1337x
 ```
 
-#### 2. Getting Trending Torrents
-
-```python
->>> from py1337x import py1337x
-
-# Using the default proxy (1337x.to) Without using cache
->>> torrents = py1337x() 
-
-# Today's trending torrents of all category
->>> torrents.trending() 
-{'items': [...], 'currentPage': 1, 'itemCount': 50, 'pageCount': 1}
-
-# Trending torrents this week of all category
->>> torrents.trending(week=True) 
-{'items': [...], 'currentPage': 1, 'itemCount': 50, 'pageCount': 1}
-
-# Todays trending anime 
->>> torrents.trending(category='anime') 
-{'items': [...], 'currentPage': 1, 'itemCount': 50, 'pageCount': 1}
-
-# Trending anime this week
->>> torrents.trending(category='anime', week=True) 
-{'items': [...], 'currentPage': 1, 'itemCount': 50, 'pageCount': 1}
+Or install from the source:
+```bash
+pip install git+https://github.com/hemantapkh/1337x
 ```
 
-#### 3. Getting information of a torrent
+
+## Examples
+
+### Searching Torrents
 ```python
+import py1337x
 
->>> from py1337x import py1337x
+torrents = py1337x.Py1337x()
 
-# Using 11337x.st and passing the cookie since 11337x.st is cloudflare protected
->>> torrents = py1337x('11337x.st', cookie='<cookie>')
+# Basic search
+results = torrents.search('ubuntu', page=1)
+for result in results.items:
+  print(f"Title={result.name} Seeders={result.seeders}")
 
-# Getting the information of a torrent by its link
->>> torrents.info(link='https://www.1337xx.to/torrent/258188/h9/') 
-{'name': 'Harry Potter and the Half-Blood Prince', 'shortName': 'Harry Potter', 'description': "....", 'category': 'Movies', 'type': 'HD', 'genre': ['Adventure', 'Fantasy', 'Family'], 'language': 'English', 'size': '3.0 GB', 'thumbnail': '...', 'images': [...], 'uploader': ' ...', 'uploaderLink': '...', 'downloads': '5310', 'lastChecked': '44 seconds ago', 'uploadDate': '4 years ago', 'seeders': '36', 'leechers': '3', 'magnetLink': '...', 'infoHash': '...'}
+# Search with sorting by seeders
+results = torrents.search('vlc', sort_by=sort.SEEDERS, category=Category.APPS)
+print(results)
 
-# Getting the information of a torrent by its link
->>> torrents.info(torrentId='258188') 
-{'name': 'Harry Potter and the Half-Blood Prince', 'shortName': 'Harry Potter', 'description': "....", 'category': 'Movies', 'type': 'HD', 'genre': ['Adventure', 'Fantasy', 'Family'], 'language': 'English', 'size': '3.0 GB', 'thumbnail': '...', 'images': [...], 'uploader': ' ...', 'uploaderLink': '...', 'downloads': '5310', 'lastChecked': '44 seconds ago', 'uploadDate': '4 years ago', 'seeders': '36', 'leechers': '3', 'magnetLink': '...', 'infoHash': '...'}
+# Get today's trending torrents
+results = torrents.trending()
+print(results)
+
 ```
+
+### Getting Torrent Information
+To get magnetlink and other information of the torrent.
+```python
+# Getting info the the first result of the above search
+torrent_id = results.items[0].torrent_id
+info = torrents.info(torrent_id=torrent_id)
+print(info)
+```
+
+## Asynchronous Usage
+For asynchronous usage, all functionalities are the same; use `AsyncPy1337x` instead of `Py1337x`:
+
+```python
+import asyncio
+from py1337x import AsyncPy1337x
+
+async def main():
+    torrents = AsyncPy1337x()
+    results = await torrents.search('vlc media player')
+    print(results)
+
+asyncio.run(main())
+```
+
+## Documentation
+
+The detailled documentation of the project is available [here](https://1337x.readthedocs.org/en/latest/).
 
 ## Contributing
 

@@ -6,7 +6,7 @@ class TorrentItem:
     """Represents a single torrent item in the search results."""
     name: str
     torrent_id: str
-    link: str
+    url: str
     seeders: str
     leechers: str
     size: str
