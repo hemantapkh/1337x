@@ -56,13 +56,12 @@ for result in results.items:
   print(f"Title={result.name} Seeders={result.seeders}")
 
 # Search with sorting by seeders
-results = torrents.search('vlc', sort_by=sort.SEEDERS, category=Category.APPS)
+results = torrents.search('vlc', sort_by=py1337x.sort.SEEDERS, category=py1337x.category.APPS)
 print(results)
 
 # Get today's trending torrents
 results = torrents.trending()
 print(results)
-
 ```
 
 ### Getting Torrent Information
