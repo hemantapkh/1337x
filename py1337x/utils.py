@@ -73,9 +73,9 @@ class URLBuilder:
             str: The constructed trending URL.
         """
         if weekly and category:
-            return f"{self.base_url}/trending-week/w/{category.lower()}/"
+            return f"{self.base_url}/trending/w/{category.lower()}/"
         elif weekly:
-            return f"{self.base_url}/trending-week"
+            return f"{self.base_url}/trending-week/"
         elif category:
             return f"{self.base_url}/trending/d/{category.lower()}/"
         return f"{self.base_url}/trending"
