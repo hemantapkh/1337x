@@ -45,7 +45,7 @@ class TorrentInfo:
     uploader_link: Optional[str]
     downloads: Optional[str]
     last_checked: Optional[str]
-    upload_date: Optional[str]
+    date_uploaded: Optional[str]
     seeders: Optional[str]
     leechers: Optional[str]
     magnet_link: Optional[str]

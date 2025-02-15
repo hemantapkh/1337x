@@ -125,11 +125,11 @@ def info_parser(response: Response, base_url: str) -> models.TorrentInfo:
 
         downloads = second_list[0].find('span').getText()
         last_checked = second_list[1].find('span').getText()
-        upload_date = second_list[2].find('span').getText()
+        date_uploaded = second_list[2].find('span').getText()
         seeders = second_list[3].find('span').getText()
         leechers = second_list[4].find('span').getText()
     else:
-        category = species = language = size = uploader = uploader_link = downloads = last_checked = upload_date = seeders = leechers = None
+        category = species = language = size = uploader = uploader_link = downloads = last_checked = date_uploaded = seeders = leechers = None
 
     return models.TorrentInfo(
         name=name,
@@ -146,7 +146,7 @@ def info_parser(response: Response, base_url: str) -> models.TorrentInfo:
         uploader_link=uploader_link,
         downloads=downloads,
         last_checked=last_checked,
-        upload_date=upload_date,
+        date_uploaded=date_uploaded,
         seeders=seeders,
         leechers=leechers,
         magnet_link=magnet_link,
