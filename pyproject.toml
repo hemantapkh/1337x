@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "1337x"
-version = "2.0.0rc1"
+version = "2.0.0"
 description = "Unofficial API of 1337x.to"
 authors = ["Hemanta Pokharel <yo@hemantapkh.com>"]
 license = "MIT"
@@ -13,7 +13,7 @@ packages = [
     { include = "py1337x" }
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
