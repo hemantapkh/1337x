@@ -1,68 +1,276 @@
+from typing import Optional, Dict, Literal
+
 import cloudscraper
-import requests_cache
+from asyncer import asyncify
 
-from py1337x import parser
+from py1337x import config, parser, utils, models
+
+class Py1337x:
+    """
+    A class to interact with the py1337x API for searching and retrieving torrent information.
+    
+    Example:
+        ```python
+        from py1337x import Py1337x
+        
+        torrents = Py1337x()
+        
+        vlc_media = torrents.search('vlc media player')
+        print(vlc_media)
+        ```
+    """
+
+    def __init__(
+        self, 
+        base_url: str = config.default_base_url, 
+        cloudscraper_kwargs: Dict ={},
+        ):
+        """
+        Initialize the Py1337x class with base URL, headers, and requests session.
+
+        Args:
+            base_url (Optional[str]): The base URL for the API.
+            cloudscraper_kwargs (Optional[dict]): Kwargs to pass in cloudscraper.
+        """
+        self.base_url = base_url
+        self.requests = cloudscraper.create_scraper(**cloudscraper_kwargs)
+        self.url_builder = utils.URLBuilder(base_url)
+
+    def search(
+        self,
+        query: str, 
+        page: int = 1, 
+        category: Optional[str] = None, 
+        sort_by: Optional[Literal["time", "size", "seeders", "leechers"]] = None, 
+        order: Literal["asc", "desc"] = "desc"
+    ) -> models.TorrentResult:
+        """
+        Search for torrents based on a query.
+
+        Args:
+            query (str): The search query.
+            page (int): The page number.
+            category (Optional[str]): Category of the torrent.
+            sort_by (Optional[str]): Sort by "time", "size", "seeders" or "leechers".
+            order (str): The order string ('asc' or 'desc').
+
+        Returns:
+            Result from the query
+            
+        Example:
+            Basic search
+            ```python
+            from py1337x import Py1337x
+    
+            results = torrents.search('ubuntu')
+            print(results)
+            ```
+            
+            Search with sorting by seeders
+            ```python
+            from py1337x.types import category, sort, order
+
+            results = torrents.search('ubuntu', sort_by=sort.SEEDERS)
+            print(results)
+            ```
+            
+            Search within a category
+            ```python
+            results = torrents.search('ubuntu', category=category.APPS)
+            print(results)
+            ```
+            
+            Paginated search results, fetching page 2
+            ```python
+            results = torrents.search('ubuntu', page=2, order=order.ASC)
+            print(results)
+            ```
+        """
+        query = self.url_builder.sanitize_query(query)
+        category = self.url_builder.sanitize_category(category)
+        url = self.url_builder.build_search_url(query, page, category, sort_by, order)
+
+        response = self.requests.get(url)
+
+        return parser.torrent_parser(response, base_url=self.base_url, page=page)
+
+    def trending(
+        self, 
+        category: Optional[str] = None, 
+        weekly: bool = False
+    ) -> models.TorrentResult:
+        """
+        Retrieve trending torrents.
+
+        Args:
+            category (Optional[str]): Category of the torrent.
+            weekly (bool): Whether to get weekly trending torrents.
+
+        Returns:
+            Trending torrents
+            
+        Example:
+            Get today's trending torrents
+            ```python
+            trending_today = torrents.trending()
+            print(trending_today)
+            ```
+            
+            Weekly trending torrents in the applications category
+            ```python
+            trending_weekly = torrents.trending(category=category.APPS, weekly=True)
+            print(trending_weekly)
+            ```
+        """
+        url = self.url_builder.build_trending_url(category, weekly)
+        response = self.requests.get(url)
+
+        return parser.torrent_parser(response, base_url=self.base_url)
+
+    def top(
+        self, 
+        category: Optional[str] = None
+    ) -> models.TorrentResult:
+        """
+        Retrieve top 100 torrents.
+
+        Args:
+            category (Optional[str]): Category of the torrent.
+
+        Returns:
+            Top 100 torrents
+            
+        Example:
+            Get top 100 torrents
+            ```python
+            top_torrents = torrents.top()
+            print(top_torrents)
+            ```
+
+            Top torrents in specific category
+            ```python
+            top_movies = torrents.top(category=category.MOVIES)
+            print(top_movies)
+            ```
+        """
+        url = self.url_builder.build_top_url(category)
+        response = self.requests.get(url)
+
+        return parser.torrent_parser(response, base_url=self.base_url)
+
+    def popular(
+        self, 
+        category: str, 
+        weekly: bool = False
+    ) -> models.TorrentResult:
+        """
+        Retrieve popular torrents.
+
+        Args:
+            category (str): Category of the torrent.
+            weekly (bool): Whether to get weekly popular torrents.
+
+        Returns:
+            Popular torrents
+            
+        Example:
+            Get popular torrents
+            ```python
+            popular = torrents.popular(category=category.GAMES)
+            print(popular)
+            ```
+            
+            Weekly popular torrents
+            ```python
+            popular_weekly = torrents.popular(category=category.APPS, weekly=True)
+            print(popular_weekly)
+            ```
+        """
+        url = self.url_builder.build_popular_url(category, weekly)
+        response = self.requests.get(url)
+
+        return parser.torrent_parser(response, base_url=self.base_url)
+
+    def browse(
+        self, 
+        category: str, 
+        page: int = 1
+    ) -> models.TorrentResult:
+        """
+        Browse torrents by category.
+
+        Args:
+            category (str): Category of the torrent.
+            page (int): The page number.
+
+        Returns:
+            Parsed browse results.
+            
+        Example:
+            Browse torrents under the applications category
+            ```python
+            apps = torrents.browse(category=category.APPS, page=2)
+            print(apps)
+            ```
+        """
+        url = self.url_builder.build_browse_url(category, page)
+        response = self.requests.get(url)
+
+        return parser.torrent_parser(response, base_url=self.base_url, page=page)
+
+    def info(
+        self, 
+        link: Optional[str] = None, 
+        torrent_id: Optional[str] = None
+    ) -> models.TorrentInfo:
+        """
+        Retrieve information of a torrent.
+
+        Args:
+            link (Optional[str]): The URL to the torrent.
+            torrent_id (Optional[str]): The torrent ID.
+
+        Returns:
+            Parsed torrent information.
+
+        Raises:
+            TypeError: If neither link nor torrent_id is provided, or if both are provided.
+        """
+        url = self.url_builder.build_info_url(link, torrent_id)
+        response = self.requests.get(url)
+
+        return parser.info_parser(response, base_url=self.base_url)
 
 
-class py1337x():
-    def __init__(self, proxy=None, cookie=None, cache=None, cacheTime=86400, backend='sqlite'):
-        self.baseUrl = f'https://www.{proxy}' if proxy else 'https://www.1337x.to'
-        self.headers = {
-            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.37',
-        } if cache else {}
+class AsyncPy1337x(Py1337x):
+    """
+    An experimental asynchronous version of the Py1337x class to interact with the py1337x
+    asynchronously by calling the original methods in a worker thread.
 
-        if cookie:
-            self.headers['cookie'] = f'cf_clearance={cookie}'
+    Example:
+        ```python
+        import asyncio
+        
+        from py1337x import AsyncPy1337x
+        
+        async def main():
+            torrents = AsyncPy1337x()
+            vlc_media = await torrents.search('vlc media player')
+            print(vlc_media)
+        
+        asyncio.run(main())
+        ```
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.requests = requests_cache.CachedSession(cache, expire_after=cacheTime, backend=backend) if cache else cloudscraper.create_scraper()
-
-    #: Searching torrents
-    def search(self, query, page=1, category=None, sortBy=None, order='desc'):
-        query = '+'.join(query.split())
-        category = category.upper() if category and category.lower() in ['xxx', 'tv'] else category.capitalize() if category else None
-        url = f"{self.baseUrl}/{'sort-' if sortBy else ''}{'category-' if category else ''}search/{query}/{category+'/' if category else ''}{sortBy.lower()+'/' if sortBy else ''}{order.lower()+'/' if sortBy else ''}{page}/"
-
-        response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl, page=page)
-
-    #: Trending torrents
-    def trending(self, category=None, week=False):
-        url = f"{self.baseUrl}/trending{'-week' if week and not category else ''}{'/w/'+category.lower()+'/' if week and category else '/d/'+category.lower()+'/' if not week and category else ''}"
-
-        response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl)
-
-    #: Top 100 torrents
-    def top(self, category=None):
-        category = 'applications' if category and category.lower() == 'apps' else 'television' if category and category.lower() == 'tv' else category.lower() if category else None
-        url = f"{self.baseUrl}/top-100{'-'+category if category else ''}"
-
-        response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl)
-
-    #: Popular torrents
-    def popular(self, category, week=False):
-        url = f"{self.baseUrl}/popular-{category.lower()}{'-week' if week else ''}"
-
-        response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl)
-
-    #: Browse torrents by category type
-    def browse(self, category, page=1):
-        category = category.upper() if category.lower() in ['xxx', 'tv'] else category.capitalize()
-        url = f'{self.baseUrl}/cat/{category}/{page}/'
-
-        response = self.requests.get(url, headers=self.headers)
-        return parser.torrentParser(response, baseUrl=self.baseUrl, page=page)
-
-    #: Info of torrent
-    def info(self, link=None, torrentId=None):
-        if not link and not torrentId:
-            raise TypeError('Missing 1 required positional argument: link or torrentId')
-        elif link and torrentId:
-            raise TypeError('Got an unexpected argument: Pass either link or torrentId')
-
-        link = f'{self.baseUrl}/torrent/{torrentId}/h9/' if torrentId else link
-        response = self.requests.get(link, headers=self.headers)
-
-        return parser.infoParser(response, baseUrl=self.baseUrl)
+    def __getattribute__(self, name):
+        # Get the attribute from the parent class
+        attr = super().__getattribute__(name)
+        
+        if callable(attr):
+            # If the attribute is callable, return an asyncified version of it
+            return asyncify(attr)
+        
+        # Otherwise, return the attribute as is
+        return attr
