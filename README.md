@@ -71,6 +71,10 @@ To get magnetlink and other information of the torrent.
 torrent_id = results.items[0].torrent_id
 info = torrents.info(torrent_id=torrent_id)
 print(info)
+
+# Convert the result to dictionary
+info_dict = info.to_dict()
+print(info_dict)
 ```
 
 ## Asynchronous Usage
