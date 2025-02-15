@@ -97,14 +97,14 @@ class Py1337x:
     def trending(
         self, 
         category: Optional[str] = None, 
-        week: bool = False
+        weekly: bool = False
     ) -> models.TorrentResult:
         """
         Retrieve trending torrents.
 
         Args:
             category (Optional[str]): Category of the torrent.
-            week (bool): Whether to get weekly trending torrents.
+            weekly (bool): Whether to get weekly trending torrents.
 
         Returns:
             Trending torrents
@@ -118,11 +118,11 @@ class Py1337x:
             
             Weekly trending torrents in the applications category
             ```python
-            trending_weekly = torrents.trending(category=category.APPS, week=True)
+            trending_weekly = torrents.trending(category=category.APPS, weekly=True)
             print(trending_weekly)
             ```
         """
-        url = self.url_builder.build_trending_url(category, week)
+        url = self.url_builder.build_trending_url(category, weekly)
         response = self.requests.get(url)
 
         return parser.torrent_parser(response, base_url=self.base_url)

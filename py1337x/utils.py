@@ -61,7 +61,7 @@ class URLBuilder:
         order_part = f"{order.lower()}/" if sortBy else ''
         return f"{self.base_url}/{sort_part}{category_part}search/{query}/{order_part}{page}/"
 
-    def build_trending_url(self, category: Optional[str], week: bool) -> str:
+    def build_trending_url(self, category: Optional[str], weekly: bool) -> str:
         """
         Build the URL for trending torrents.
 
@@ -72,9 +72,9 @@ class URLBuilder:
         Returns:
             str: The constructed trending URL.
         """
-        if week and category:
+        if weekly and category:
             return f"{self.base_url}/trending-week/w/{category.lower()}/"
-        elif week:
+        elif weekly:
             return f"{self.base_url}/trending-week"
         elif category:
             return f"{self.base_url}/trending/d/{category.lower()}/"
