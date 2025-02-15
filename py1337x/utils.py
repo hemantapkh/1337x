@@ -42,7 +42,7 @@ class URLBuilder:
             return category.capitalize()
         return None
 
-    def build_search_url(self, query: str, page: int, category: Optional[str], sortBy: Optional[str], order: str) -> str:
+    def build_search_url(self, query: str, page: int, category: Optional[str], sort_by: Optional[str], order: str) -> str:
         """
         Build the URL for searching torrents.
 
@@ -50,16 +50,30 @@ class URLBuilder:
             query (str): The search query.
             page (int): The page number.
             category (Optional[str]): The category string.
-            sortBy (Optional[str]): The sort by string.
+            sort_by (Optional[str]): The sort by string.
             order (str): The order string ('asc' or 'desc').
 
         Returns:
             str: The constructed search URL.
         """
-        category_part = f"category-{category}/" if category else ''
-        sort_part = f"sort-{sortBy.lower()}/" if sortBy else ''
-        order_part = f"{order.lower()}/" if sortBy else ''
-        return f"{self.base_url}/{sort_part}{category_part}search/{query}/{order_part}{page}/"
+        query = self.sanitize_query(query)
+        category_part = ""
+        category_type = ""
+        sort_part = ""
+        sort_type = ""
+        order_part = ""
+
+        if category:
+            category_part = "category-"
+            category_type = f"{self.sanitize_category(category)}/"
+        
+        if sort_by:
+            sort_part = "sort-"
+            sort_type = f"{sort_by.lower()}/"
+            order_part = f"{order.lower()}/"
+            
+        url =  f"{self.base_url}/{sort_part}{category_part}search/{query}/{category_type}{sort_type}{order_part}{page}/"
+        return url
 
     def build_trending_url(self, category: Optional[str], weekly: bool) -> str:
         """
