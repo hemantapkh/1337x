@@ -1,6 +1,6 @@
 [project]
 name = "1337x"
-version = "2.0.0"
+version = "2.0.1"
 description = "Unofficial API of 1337x.to"
 authors = [{ name = "Hemanta Pokharel", email = "yo@hemantapkh.com" }]
 license = { text = "MIT" }
