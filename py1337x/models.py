@@ -1,9 +1,11 @@
+from dataclasses import asdict, dataclass
 from typing import List, Optional
-from dataclasses import dataclass, asdict
+
 
 @dataclass
 class TorrentItem:
     """Represents a single torrent item in the search results."""
+
     name: str
     torrent_id: str
     url: str
@@ -13,24 +15,28 @@ class TorrentItem:
     time: str
     uploader: str
     uploader_link: str
-    
+
     def to_dict(self):
         return asdict(self)
+
 
 @dataclass
 class TorrentResult:
     """Represents the result of a torrent search."""
+
     items: List[TorrentItem]
     current_page: int
     item_count: int
     page_count: int
-    
+
     def to_dict(self):
         return asdict(self)
+
 
 @dataclass
 class TorrentInfo:
     """Represents information about a torrent."""
+
     name: Optional[str]
     short_name: Optional[str]
     description: Optional[str]
@@ -50,6 +56,6 @@ class TorrentInfo:
     leechers: Optional[str]
     magnet_link: Optional[str]
     info_hash: Optional[str]
-    
+
     def to_dict(self):
         return asdict(self)
