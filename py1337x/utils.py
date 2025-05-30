@@ -1,5 +1,6 @@
 from typing import Optional
 
+
 class URLBuilder:
     """
     A class to build and sanitize URLs.
@@ -24,7 +25,7 @@ class URLBuilder:
         Returns:
             str: The sanitized query.
         """
-        return '+'.join(query.split())
+        return "+".join(query.split())
 
     def sanitize_category(self, category: Optional[str]) -> Optional[str]:
         """
@@ -37,12 +38,14 @@ class URLBuilder:
             Optional[str]: The sanitized category string or None if no category is provided.
         """
         if category:
-            if category.lower() in ['xxx', 'tv']:
+            if category.lower() in ["xxx", "tv"]:
                 return category.upper()
             return category.capitalize()
         return None
 
-    def build_search_url(self, query: str, page: int, category: Optional[str], sort_by: Optional[str], order: str) -> str:
+    def build_search_url(
+        self, query: str, page: int, category: Optional[str], sort_by: Optional[str], order: str
+    ) -> str:
         """
         Build the URL for searching torrents.
 
@@ -66,13 +69,13 @@ class URLBuilder:
         if category:
             category_part = "category-"
             category_type = f"{self.sanitize_category(category)}/"
-        
+
         if sort_by:
             sort_part = "sort-"
             sort_type = f"{sort_by.lower()}/"
             order_part = f"{order.lower()}/"
-            
-        url =  f"{self.base_url}/{sort_part}{category_part}search/{query}/{category_type}{sort_type}{order_part}{page}/"
+
+        url = f"{self.base_url}/{sort_part}{category_part}search/{query}/{category_type}{sort_type}{order_part}{page}/"
         return url
 
     def build_trending_url(self, category: Optional[str], weekly: bool) -> str:
@@ -105,10 +108,10 @@ class URLBuilder:
             str: The constructed top 100 URL.
         """
         if category:
-            if category.lower() == 'apps':
-                category = 'applications'
-            elif category.lower() == 'tv':
-                category = 'television'
+            if category.lower() == "apps":
+                category = "applications"
+            elif category.lower() == "tv":
+                category = "television"
             return f"{self.base_url}/top-100-{category.lower()}"
         return f"{self.base_url}/top-100"
 
@@ -136,11 +139,11 @@ class URLBuilder:
         Returns:
             str: The constructed browse URL.
         """
-        if category.lower() in ['xxx', 'tv']:
+        if category.lower() in ["xxx", "tv"]:
             category = category.upper()
         else:
             category = category.capitalize()
-        return f'{self.base_url}/cat/{category}/{page}/'
+        return f"{self.base_url}/cat/{category}/{page}/"
 
     def build_info_url(self, link: Optional[str], torrent_id: Optional[str]) -> Optional[str]:
         """
@@ -157,8 +160,8 @@ class URLBuilder:
             TypeError: If neither link nor torrent_id is provided, or if both are provided.
         """
         if not link and not torrent_id:
-            raise TypeError('Missing 1 required positional argument: link or torrent_id')
+            raise TypeError("Missing 1 required positional argument: link or torrent_id")
         elif link and torrent_id:
-            raise TypeError('Got an unexpected argument: Pass either link or torrent_id')
-        
-        return f'{self.base_url}/torrent/{torrent_id}//' if torrent_id else link
+            raise TypeError("Got an unexpected argument: Pass either link or torrent_id")
+
+        return f"{self.base_url}/torrent/{torrent_id}/-/" if torrent_id else link

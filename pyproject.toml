@@ -1,17 +1,12 @@
-[tool.poetry]
+[project]
 name = "1337x"
 version = "2.0.0"
 description = "Unofficial API of 1337x.to"
-authors = ["Hemanta Pokharel <yo@hemantapkh.com>"]
-license = "MIT"
+authors = [{ name = "Hemanta Pokharel", email = "yo@hemantapkh.com" }]
+license = { text = "MIT" }
 readme = "README.md"
-repository = "https://github.com/hemantapkh/1337x"
-documentation = "https://github.com/hemantapkh/1337x/blob/main/README.md"
-urls = { "Issue tracker" = "https://github.com/hemantapkh/1337x/issues" }
+requires-python = ">=3.8"
 keywords = ["1337x", "torrents"]
-packages = [
-    { include = "py1337x" }
-]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -19,16 +14,21 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Utilities"
 ]
+dependencies = [
+    "requests>=2.32.3",
+    "beautifulsoup4>=4.12.3",
+    "cloudscraper>=1.2.71",
+    "asyncer>=0.0.8"
+]
 
-
-[tool.poetry.dependencies]
-python = "^3.8"
-requests = "^2.32.3"
-beautifulsoup4 = "^4.12.3"
-cloudscraper = "^1.2.71"
-asyncer = "0.0.8"
-
+[project.urls]
+Homepage = "https://github.com/hemantapkh/1337x"
+Documentation = "https://github.com/hemantapkh/1337x/blob/main/README.md"
+"Issue Tracker" = "https://github.com/hemantapkh/1337x/issues"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+include = ["./py1337x"]
