@@ -1,34 +1,40 @@
 [project]
 name = "1337x"
-version = "2.0.1"
+version = "2.0.0"
 description = "Unofficial API of 1337x.to"
 authors = [{ name = "Hemanta Pokharel", email = "yo@hemantapkh.com" }]
-license = { text = "MIT" }
+requires-python = "~=3.8"
 readme = "README.md"
-requires-python = ">=3.8"
-keywords = ["1337x", "torrents"]
+license = "MIT"
+keywords = [
+    "1337x",
+    "torrents",
+]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Topic :: Utilities"
+    "Topic :: Utilities",
 ]
 dependencies = [
-    "requests>=2.32.3",
-    "beautifulsoup4>=4.12.3",
-    "cloudscraper>=1.2.71",
-    "asyncer>=0.0.8"
+    "requests>=2.32.3,<3",
+    "beautifulsoup4>=4.12.3,<5",
+    "cloudscraper>=1.2.71,<2",
+    "asyncer==0.0.8",
 ]
 
 [project.urls]
-Homepage = "https://github.com/hemantapkh/1337x"
+Repository = "https://github.com/hemantapkh/1337x"
 Documentation = "https://github.com/hemantapkh/1337x/blob/main/README.md"
-"Issue Tracker" = "https://github.com/hemantapkh/1337x/issues"
+"Issue tracker" = "https://github.com/hemantapkh/1337x/issues"
 
-[build-system]
-requires = ["hatchling>=1.25.0"]
-build-backend = "hatchling.build"
+[tool.hatch.build.targets.sdist]
+include = ["py1337x"]
 
 [tool.hatch.build.targets.wheel]
-include = ["./py1337x"]
+include = ["py1337x"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
