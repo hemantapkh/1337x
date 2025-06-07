@@ -25,6 +25,7 @@ class Py1337x:
         self,
         base_url: str = config.default_base_url,
         cloudscraper_kwargs: Dict = {},
+        requests_kwargs: Dict = {}
     ):
         """
         Initialize the Py1337x class with base URL, headers, and requests session.
@@ -36,6 +37,7 @@ class Py1337x:
         self.base_url = base_url
         self.requests = cloudscraper.create_scraper(**cloudscraper_kwargs)
         self.url_builder = utils.URLBuilder(base_url)
+        self.requests_kwargs = requests_kwargs
 
     def search(
         self,
@@ -92,7 +94,7 @@ class Py1337x:
         url = self.url_builder.build_search_url(query, page, category, sort_by, order)
         print(url)
 
-        response = self.requests.get(url)
+        response = self.requests.get(url, **self.requests_kwargs)
 
         return parser.torrent_parser(response, base_url=self.base_url, page=page)
 
@@ -121,7 +123,7 @@ class Py1337x:
             ```
         """
         url = self.url_builder.build_trending_url(category, weekly)
-        response = self.requests.get(url)
+        response = self.requests.get(url, **self.requests_kwargs)
 
         return parser.torrent_parser(response, base_url=self.base_url)
 
@@ -149,7 +151,7 @@ class Py1337x:
             ```
         """
         url = self.url_builder.build_top_url(category)
-        response = self.requests.get(url)
+        response = self.requests.get(url, **self.requests_kwargs)
 
         return parser.torrent_parser(response, base_url=self.base_url)
 
@@ -178,7 +180,7 @@ class Py1337x:
             ```
         """
         url = self.url_builder.build_popular_url(category, weekly)
-        response = self.requests.get(url)
+        response = self.requests.get(url, **self.requests_kwargs)
 
         return parser.torrent_parser(response, base_url=self.base_url)
 
@@ -201,7 +203,7 @@ class Py1337x:
             ```
         """
         url = self.url_builder.build_browse_url(category, page)
-        response = self.requests.get(url)
+        response = self.requests.get(url, **self.requests_kwargs)
 
         return parser.torrent_parser(response, base_url=self.base_url, page=page)
 
@@ -220,7 +222,7 @@ class Py1337x:
             TypeError: If neither link nor torrent_id is provided, or if both are provided.
         """
         url = self.url_builder.build_info_url(link, torrent_id)
-        response = self.requests.get(url)
+        response = self.requests.get(url, **self.requests_kwargs)
 
         return parser.info_parser(response, base_url=self.base_url)
 
