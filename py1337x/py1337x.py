@@ -93,7 +93,6 @@ class Py1337x:
         query = self.url_builder.sanitize_query(query)
         category = self.url_builder.sanitize_category(category)
         url = self.url_builder.build_search_url(query, page, category, sort_by, order)
-        print(url)
 
         response = self.requests.get(url, **self.requests_kwargs)
 
