@@ -33,6 +33,7 @@ class Py1337x:
         Args:
             base_url (Optional[str]): The base URL for the API.
             cloudscraper_kwargs (Optional[dict]): Kwargs to pass in cloudscraper.
+            requests_kwargs (Optional[dict]): Kwargs to pass in requests.
         """
         self.base_url = base_url
         self.requests = cloudscraper.create_scraper(**cloudscraper_kwargs)
