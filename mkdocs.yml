@@ -4,61 +4,66 @@ site_url: https://hemantapkh.com
 repo_name: hemantapkh/1337x
 repo_url: https://github.com/hemantapkh/1337x
 theme:
-  name: "material"
-  palette:
-  - media: "(prefers-color-scheme)"
-    toggle:
-      icon: material/lightbulb-auto
-      name: Switch to light mode
-  - media: '(prefers-color-scheme: light)'
-    scheme: default
-    primary: teal
-    accent: amber
-    toggle:
-      icon: material/lightbulb
-      name: Switch to dark mode
-  - media: '(prefers-color-scheme: dark)'
-    scheme: slate
-    primary: teal
-    accent: amber
-    toggle:
-      icon: material/lightbulb-outline
-      name: Switch to system preference
-
-  icon:
-    repo: fontawesome/brands/github-alt
+  name: material
   language: en
-
+  logo: https://raw.githubusercontent.com/hemantapkh/1337x/main/images/1337x.png
+  favicon: https://raw.githubusercontent.com/hemantapkh/1337x/main/images/favicon.png
+  icon:
+    repo: fontawesome/brands/github
   features:
-  - content.code.annotate
-  - content.code.copy
-  - content.code.select
-  - content.footnote.tooltips
-  - content.tabs.link
-  - content.tooltips
-  - navigation.footer
-  - navigation.indexes
-  - navigation.instant
-  - navigation.instant.prefetch
-  - navigation.instant.preview
-  - navigation.instant.progress
-  - navigation.path
-  - navigation.tabs
-  - navigation.tabs.sticky
-  - navigation.top
-  - navigation.tracking
-  - search.highlight
-  - search.share
-  - search.suggest
-  - toc.follow
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.footer
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.code.select
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+nav:
+  - "Home": "index.md"
+  - "API Reference":
+      - "Synchronous Client": "sync_client.md"
+      - "Asynchronous Client": "async_client.md"
+      - "Data Models": "models.md"
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
 
 plugins:
-- search
-- mkdocstrings:
-    handlers:
-      python:
-        options:
-          members_order: source
-          merge_init_into_class: true
-          docstring_options:
-            ignore_init_summary: true
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: false
+            members_order: source
+            merge_init_into_class: false
+            docstring_options:
+              ignore_init_summary: true
+            extensions:
+              - griffe_fieldz:
+                  include_inherited: false
+                  include_private: false
+                  add_fields_to: docstring-attributes
+                  remove_fields_from_members: true

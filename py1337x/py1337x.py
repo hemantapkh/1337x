@@ -8,7 +8,7 @@ from py1337x import config, models, parser, utils
 
 class Py1337x:
     """
-    A class to interact with the py1337x API for searching and retrieving torrent information.
+    A synchronous client to interact with the 1337x API for searching and retrieving torrent information.
 
     Example:
         ```python
@@ -229,8 +229,11 @@ class Py1337x:
 
 class AsyncPy1337x(Py1337x):
     """
-    An experimental asynchronous version of the Py1337x class to interact with the py1337x
-    asynchronously by calling the original methods in a worker thread.
+    An experimental asynchronous version of the Py1337x class, which calls the
+    original synchronous methods in a worker thread.
+
+    This client mirrors the functionality of the synchronous `Py1337x` client but provides an `async/await` interface.
+    All methods, parameters, and return models are identical to the synchronous version.
 
     Example:
         ```python
