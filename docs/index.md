@@ -36,6 +36,9 @@ pip install git+https://github.com/hemantapkh/1337x
 
 ## Examples
 
+!!! warning
+    Due to a recent change on the 1337x website, using the `.search()` method without a `category` may return empty results. Specifying a category is temporarily recommended to ensure functionality.
+
 ### Searching Torrents
 ```python
 import py1337x
@@ -43,7 +46,11 @@ import py1337x
 torrents = py1337x.Py1337x()
 
 # Basic search
-results = torrents.search('ubuntu', page=1)
+results = torrents.search(
+    'ubuntu',
+    page=1,
+    category=py1337x.category.APPS
+)
 for result in results.items:
   print(f"Title={result.name} Seeders={result.seeders}")
 

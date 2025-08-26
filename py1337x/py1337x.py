@@ -51,6 +51,10 @@ class Py1337x:
         """
         Search for torrents based on a query.
 
+        .. warning::
+           Due to a recent change on the 1337x website, using the ``search()`` method without a ``category``
+           may return empty results. Specifying a category is temporarily recommended.
+
         Args:
             query (str): The search query.
             page (int): The page number.
@@ -65,8 +69,10 @@ class Py1337x:
             Basic search
             ```python
             from py1337x import Py1337x
+            from py1337x.types import category
 
-            results = torrents.search('ubuntu')
+            torrents = Py1337x()
+            results = torrents.search('ubuntu', category=category.APPS)
             print(results)
             ```
 
@@ -74,7 +80,7 @@ class Py1337x:
             ```python
             from py1337x.types import category, sort, order
 
-            results = torrents.search('ubuntu', sort_by=sort.SEEDERS)
+            results = torrents.search('ubuntu', category=category.APPS, sort_by=sort.SEEDERS)
             print(results)
             ```
 
@@ -86,7 +92,7 @@ class Py1337x:
 
             Paginated search results, fetching page 2
             ```python
-            results = torrents.search('ubuntu', page=2, order=order.ASC)
+            results = torrents.search('ubuntu', category=category.APPS, page=2, order=order.ASC)
             print(results)
             ```
         """
