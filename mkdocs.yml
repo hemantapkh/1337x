@@ -47,6 +47,8 @@ nav:
       - "Data Models": "models.md"
 
 markdown_extensions:
+  - admonition
+  - pymdownx.details
   - pymdownx.highlight
   - pymdownx.superfences
 

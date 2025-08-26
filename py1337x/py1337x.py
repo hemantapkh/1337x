@@ -51,10 +51,6 @@ class Py1337x:
         """
         Search for torrents based on a query.
 
-        .. warning::
-           Due to a recent change on the 1337x website, using the ``search()`` method without a ``category``
-           may return empty results. Specifying a category is temporarily recommended.
-
         Args:
             query (str): The search query.
             page (int): The page number.
